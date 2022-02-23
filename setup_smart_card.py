@@ -75,6 +75,9 @@ def print_version_info():
     """
     art.tprint("Smart Card Init Tool")
     print("Version: %s" % version.__version__)
+    print("Copyright (c) 2022 Antonio Musarra <antonio.musarra@gmail.com>")
+    print("Antonio Musarra's Blog - https://www.dontesta.it")
+    print("GitHub Project https://github.com/amusarra")
     print("---\n")
 
 

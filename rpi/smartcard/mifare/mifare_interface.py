@@ -25,9 +25,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import sys
 from rpi import version
-from smartcard.CardType import AnyCardType
+from smartcard.CardType import ATRCardType
 from smartcard.CardRequest import CardRequest
 from smartcard.Exceptions import CardRequestTimeoutException
+from smartcard.util import toBytes
 
 __author__ = "Antonio Musarra"
 __copyright__ = "Copyright (c) 2022 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)"
@@ -53,8 +54,11 @@ class MifareClassicInterface:
         Initialize and connect to the Smart Card
         """
 
+        # Mifare Classic 1k ART
+        self.MIFARE_CLASSIC_1K_ATR = "3B 8F 80 01 80 4F 0C A0 00 00 03 06 03 00 01 00 00 00 00 6A"
+
         # Define the card type and initialize the Card Request
-        __card_type = AnyCardType()
+        __card_type = ATRCardType(toBytes(self.MIFARE_CLASSIC_1K_ATR))
         __card_request = CardRequest(timeout=3, cardType=__card_type)
 
         # To checking if authentication process, it's fine
