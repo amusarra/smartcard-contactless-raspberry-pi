@@ -54,7 +54,7 @@ class MifareClassicInterface:
         Initialize and connect to the Smart Card
         """
 
-        # Mifare Classic 1k ART
+        # Mifare Classic 1k ATR
         self.MIFARE_CLASSIC_1K_ATR = "3B 8F 80 01 80 4F 0C A0 00 00 03 06 03 00 01 00 00 00 00 6A"
 
         # Define the card type and initialize the Card Request
