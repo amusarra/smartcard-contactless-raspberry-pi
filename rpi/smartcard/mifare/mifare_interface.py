@@ -23,20 +23,20 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+import sys
+from rpi import version
+from smartcard.CardType import AnyCardType
+from smartcard.CardRequest import CardRequest
+from smartcard.Exceptions import CardRequestTimeoutException
+
 __author__ = "Antonio Musarra"
 __copyright__ = "Copyright (c) 2022 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)"
 __credits__ = ["Antonio Musarra"]
-__version__ = "1.0.0"
+__version__ = version.__version__
 __license__ = "MIT"
 __maintainer__ = "Antonio Musarra"
 __email__ = "antonio.musarra@gmail.com"
 __status__ = "Development"
-
-import sys
-
-from smartcard.CardType import AnyCardType
-from smartcard.CardRequest import CardRequest
-from smartcard.Exceptions import CardRequestTimeoutException
 
 
 class MifareClassicInterface:

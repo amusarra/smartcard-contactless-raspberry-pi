@@ -38,6 +38,8 @@ __status__ = "Development"
 import argparse
 import art
 import rpi.smartcard.mifare.mifare_interface as mifare
+
+from rpi import version
 from smartcard.util import toHexString
 from smartcard.util import toASCIIString
 from smartcard.util import toASCIIBytes
@@ -72,7 +74,7 @@ def print_version_info():
     :return: void
     """
     art.tprint("Smart Card Init Tool")
-    print("Version: %s" % __version__)
+    print("Version: %s" % version.__version__)
     print("---\n")
 
 
