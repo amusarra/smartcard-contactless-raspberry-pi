@@ -24,11 +24,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import sys
+
 from rpi import version
 from smartcard.CardType import ATRCardType
 from smartcard.CardRequest import CardRequest
 from smartcard.Exceptions import CardRequestTimeoutException
-from smartcard.util import toBytes
+from smartcard.CardConnectionObserver import ConsoleCardConnectionObserver
+from smartcard.CardMonitoring import CardObserver
+from smartcard.util import toBytes, toHexString, toASCIIString
 
 __author__ = "Antonio Musarra"
 __copyright__ = "Copyright (c) 2022 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)"
@@ -40,7 +43,7 @@ __email__ = "antonio.musarra@gmail.com"
 __status__ = "Development"
 
 
-class MifareClassicInterface:
+class MifareClassicInterface(CardObserver):
     """
     The Python interface to initialize data on Mifare Classic 1K
     Smart Card
@@ -49,7 +52,7 @@ class MifareClassicInterface:
     make sure your reader is compatible with this library.
     """
 
-    def __init__(self):
+    def __init__(self, authentication_key=None):
         """
         Initialize and connect to the Smart Card
         """
@@ -57,7 +60,7 @@ class MifareClassicInterface:
         # Mifare Classic 1k ATR
         self.MIFARE_CLASSIC_1K_ATR = "3B 8F 80 01 80 4F 0C A0 00 00 03 06 03 00 01 00 00 00 00 6A"
 
-        # Define the card type and initialize the Card Request
+        # Define the card type and initialize the Card Service and Request
         self.__card_type = ATRCardType(toBytes(self.MIFARE_CLASSIC_1K_ATR))
         self.__card_service = None
         self.__card_request = None
@@ -65,7 +68,13 @@ class MifareClassicInterface:
         # To checking if authentication process, it's fine
         self.__authenticated = False
 
-    def authentication(self):
+        self.__authentication_key = authentication_key
+
+        # Initialize the card observer that is notified
+        # when cards are inserted/removed from the system
+        self.__observer = ConsoleCardConnectionObserver()
+
+    def authentication(self, card_connection_decorator=None):
         """
         This method uses the keys stored in the reader to do authentication with the MIFARE 1K/4K card (PICC).
         Two types of authentication keys are used: TYPE_A and TYPE_B.
@@ -99,6 +108,8 @@ class MifareClassicInterface:
             Key Number      1 byte
                             00h ~ 01h = Key Location.
 
+        :param card_connection_decorator: The Card Connection Decorator object is used when connection was created from
+        card object (see the observable)
         :return: True if it's ok False otherwise
         """
 
@@ -107,7 +118,11 @@ class MifareClassicInterface:
 
         # Success   sw1=90 sw2=00h The operation completed successfully
         # Error     sw1=63 sw2=00h The operation failed.
-        data, sw1, sw2 = self.__card_service.connection.transmit(apdu_authentication)
+        if card_connection_decorator is None:
+            data, sw1, sw2 = self.__card_service.connection.transmit(apdu_authentication)
+        else:
+            card_connection_decorator.connect()
+            data, sw1, sw2 = card_connection_decorator.transmit(apdu_authentication)
 
         if sw1 == 0x90:
             self.__authenticated = True
@@ -153,39 +168,53 @@ class MifareClassicInterface:
         """
         return self.__card_service.connection.getATR()
 
-    def get_document_id(self):
+    def get_document_id(self, card_connection_decorator=None):
         """
         Send APDU for getting the identification number of the identification document (example: identity card,
         driving license, social security number, passport number) of the person to whom the card is delivered.
 
+        :param card_connection_decorator: The Card Connection Decorator object is used when connection was created from
+        card object (see the observable)
         :return: The identification number of the identification document
         """
 
-        # APDU to read the 16 bytes from the binary block 04h
+        # APDU to read the 16 bytes from the binary block 01h
         apdu_document_id = [0xFF, 0xB0, 0x00, 0x01, 0x10]
+
 
         # Success   sw1=90 sw2=00h The operation completed successfully
         # Error     sw1=63 sw2=00h The operation failed.
-        data, sw1, sw2 = self.__card_service.connection.transmit(apdu_document_id)
+        if card_connection_decorator is None:
+            data, sw1, sw2 = self.__card_service.connection.transmit(apdu_document_id)
+        else:
+            card_connection_decorator.connect()
+            data, sw1, sw2 = card_connection_decorator.transmit(apdu_document_id)
 
         if sw1 == 0x90:
             return data
         else:
-            print("Error on getting the UID")
+            print("Error on getting the document id")
 
-    def get_reader(self):
+    def get_reader(self, card_connection_decorator=None):
         """
         Return the information about the Smart Card Reader
 
+        :param card_connection_decorator: The Card Connection Decorator object is used when connection was created from
+        card object (see the observable)
         :return: The information about the Smart Card Reader
         """
 
-        return self.__card_service.connection.getReader()
+        if card_connection_decorator is None:
+            return self.__card_service.connection.getReader()
+        else:
+            return card_connection_decorator.getReader()
 
-    def get_uid(self):
+    def get_uid(self, card_connection_decorator=None):
         """
         Send APDU for getting the card UID
 
+        :param card_connection_decorator: The Card Connection Decorator object is used when connection was created from
+        card object (see the observable)
         :return: The UID of the Mifare Classic 1K card
         """
 
@@ -194,14 +223,18 @@ class MifareClassicInterface:
         # Success   sw1=90 sw2=00h The operation completed successfully
         # Error     sw1=63 sw2=00h The operation failed.
         # Error     sw1=6A sw2=81h Function not supported
-        data, sw1, sw2 = self.__card_service.connection.transmit(apdu)
+        if card_connection_decorator is None:
+            data, sw1, sw2 = self.__card_service.connection.transmit(apdu)
+        else:
+            card_connection_decorator.connect()
+            data, sw1, sw2 = card_connection_decorator.transmit(apdu)
 
         if sw1 == 0x90:
             return data
         else:
             print("Error on getting the UID")
 
-    def load_auth_key(self, key):
+    def load_auth_key(self, key=None, card_connection_decorator=None):
         """
         This method loads the authentication keys into the reader. The authentication keys are used to
         authenticate the particular sector of the MIFARE Classic 1K/4K memory card.
@@ -224,27 +257,38 @@ class MifareClassicInterface:
             Key 6 bytes.
                             The key value loaded into the reader. e.g., {FF FF FF FF FF FFh}
 
+        :param card_connection_decorator: The Card Connection Decorator object is used when connection was created from
+        card object (see the observable)
         :param key: The Load Authentication Key (es: 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF). The length must be of 6 bytes
         :return: True if the load authentication keys it's ok false otherwise
         """
 
         # APDU to load the authentication keys into the reader
-        apdu_load_key = [0xFF, 0x82, 0x00, 0x00, 0x06] + key
+        if self.__authentication_key is None:
+            apdu_load_key = [0xFF, 0x82, 0x00, 0x00, 0x06] + key
+        else:
+            apdu_load_key = [0xFF, 0x82, 0x00, 0x00, 0x06] + self.__authentication_key
 
         # Success   sw1=90 sw2=00h The operation completed successfully
         # Error     sw1=63 sw2=00h The operation failed.
-        data, sw1, sw2 = self.__card_service.connection.transmit(apdu_load_key)
+        if card_connection_decorator is None:
+            data, sw1, sw2 = self.__card_service.connection.transmit(apdu_load_key)
+        else:
+            card_connection_decorator.connect()
+            data, sw1, sw2 = card_connection_decorator.transmit(apdu_load_key)
 
         if sw1 == 0x90:
             return True
         else:
             return False
 
-    def set_document_id(self, document_id):
+    def set_document_id(self, document_id, card_connection_decorator=None):
         """
         Send APDU for setting (store) the identification number of the identification document (example: identity card,
         driving license, social security number, passport number) of the person to whom the card is delivered.
 
+        :param card_connection_decorator: The Card Connection Decorator object is used when connection was created from
+        card object (see the observable)
         :return: True if store it's ok False otherwise
         """
 
@@ -253,9 +297,30 @@ class MifareClassicInterface:
 
         # Success   sw1=90 sw2=00h The operation completed successfully
         # Error     sw1=63 sw2=00h The operation failed.
-        data, sw1, sw2 = self.__card_service.connection.transmit(apdu_document_id)
+        if card_connection_decorator is None:
+            data, sw1, sw2 = self.__card_service.connection.transmit(apdu_document_id)
+        else:
+            card_connection_decorator.connect()
+            data, sw1, sw2 = card_connection_decorator.transmit(apdu_document_id)
 
         if sw1 == 0x90:
             return True
         else:
             return False
+
+    def update(self, observable, actions):
+        (added_cards, removed_cards) = actions
+        for card in added_cards:
+            card_connection_decorator = card.createConnection()
+            if self.load_auth_key(card_connection_decorator=card_connection_decorator):
+                if self.authentication(card_connection_decorator):
+                    print(f"+Insert Card with UID {toHexString(self.get_uid(card_connection_decorator))}")
+                    print(f"\tGet Identification Number {toASCIIString(self.get_document_id(card_connection_decorator))}")
+                    print("\tCheck if authorized to access...\n")
+                else:
+                    print("Authentication failed")
+            else:
+                print("Load authentication key failed")
+
+        for card in removed_cards:
+            print(f"-Removed Cart ATR {toHexString(card.atr)}")
