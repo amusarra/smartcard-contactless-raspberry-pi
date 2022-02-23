@@ -90,6 +90,8 @@ def main():
     print_version_info()
 
     mifare_interface = mifare.MifareClassicInterface()
+    mifare_interface.card_request_and_connect()
+
     uid = mifare_interface.get_uid()
     reader = mifare_interface.get_reader()
 

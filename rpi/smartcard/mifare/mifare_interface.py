@@ -58,23 +58,12 @@ class MifareClassicInterface:
         self.MIFARE_CLASSIC_1K_ATR = "3B 8F 80 01 80 4F 0C A0 00 00 03 06 03 00 01 00 00 00 00 6A"
 
         # Define the card type and initialize the Card Request
-        __card_type = ATRCardType(toBytes(self.MIFARE_CLASSIC_1K_ATR))
-        __card_request = CardRequest(timeout=3, cardType=__card_type)
+        self.__card_type = ATRCardType(toBytes(self.MIFARE_CLASSIC_1K_ATR))
+        self.__card_service = None
+        self.__card_request = None
 
         # To checking if authentication process, it's fine
         self.__authenticated = False
-
-        # Wait for the card
-        print('Waiting for the Mifare Classic 1K...')
-
-        try:
-            self.__card_service = __card_request.waitforcard()
-        except CardRequestTimeoutException:
-            print('Card not found, exiting')
-            sys.exit(1)
-
-        # Connect to the card if found
-        self.__card_service.connection.connect()
 
     def authentication(self):
         """
@@ -125,6 +114,27 @@ class MifareClassicInterface:
             return True
         else:
             return False
+
+    def card_request_and_connect(self):
+        """
+        Make a Card Request and establishes a connection
+
+        :except: In case of an exception on the connection the program will terminate.
+        :return: void
+        """
+        self.__card_request = CardRequest(timeout=3, cardType=self.__card_type)
+
+        # Wait for the card
+        print('Waiting for the Mifare Classic 1K...')
+
+        try:
+            self.__card_service = self.__card_request.waitforcard()
+        except CardRequestTimeoutException:
+            print('Card not found, exiting')
+            sys.exit(1)
+
+        # Connect to the card if found
+        self.__card_service.connection.connect()
 
     def disconnect(self):
         """
