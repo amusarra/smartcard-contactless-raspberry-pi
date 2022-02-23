@@ -1,2 +1,4 @@
 pyscard==2.0.2
 art==5.4
+pidfile==0.1.1
+pid==3.0.4
