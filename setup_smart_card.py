@@ -68,7 +68,7 @@ parser.add_argument("-s", "--store-on-database", help='In this way will associat
                                                       'user.', action="store_true")
 parser.add_argument("-f", "--firstname", help='Firstname of the person to assign the Smart Card')
 parser.add_argument("-l", "--lastname", help='Lastname of the person to assign the Smart Card')
-parser.add_argument("-r", "--room-number", help='The room numer')
+parser.add_argument("-r", "--room-number", choices=['0', '1', '2', '3'], help='The room numer')
 
 args = parser.parse_args()
 
@@ -161,15 +161,16 @@ def main():
         documents = db.read(search_filter)
 
         if len(documents) == 0:
-            print(f"Searching entry on the MongoDB with filter {search_filter}...[Not Found]")
+            print(f"Searching entry on the MongoDB with filter {search_filter}..."
+                  f"{Fore.LIGHTYELLOW_EX}[Not Found]{Style.RESET_ALL}")
             new_document = dict(createDate=datetime.utcnow().isoformat() + "Z", firstname=f"{firstname}",
                                 lastname=f"{lastname}", documentId=f"{identification_number}", smartCardEnabled="true",
                                 smartCardId=f"{uid}", smartCardInitDate=datetime.utcnow().isoformat() + "Z",
                                 roomNumber=int(room_number), countAccess=0)
 
-            db.insert_data(new_document)
+            document_id = db.insert_data(new_document)
             print(f"Starting store data into MongoDB ({firstname}, {lastname}, Room Number: {room_number})..."
-                  f"{Fore.GREEN}[Inserted]")
+                  f"{Fore.GREEN}[Inserted with id: {document_id}]")
         else:
             print(f"Searching entry on the MongoDB with filter {search_filter}..."
                   f"{Fore.LIGHTYELLOW_EX}[Already exits]")
