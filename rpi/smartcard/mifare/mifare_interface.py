@@ -32,8 +32,9 @@ __maintainer__ = "Antonio Musarra"
 __email__ = "antonio.musarra@gmail.com"
 __status__ = "Development"
 
+import asyncio
 import sys
-
+import time
 
 import rpi.smartcard.mongodb.smart_card_access_crud as dbstore
 
@@ -328,6 +329,7 @@ class MifareClassicInterface(CardObserver):
             # The createConnection method does not return the CardConnect but the CardConnectionDecorator object. For
             # more info read https://pyscard.sourceforge.io/user-guide.html#card-connection-decorators
             card_connection_decorator = card.createConnection()
+
             if self.load_auth_key(card_connection_decorator=card_connection_decorator):
                 if self.authentication(card_connection_decorator):
                     uid = toHexString(self.get_uid(card_connection_decorator))
@@ -383,6 +385,10 @@ class MifareClassicInterface(CardObserver):
 
                         print(f"\tActivate the relay for the room number {room_number}..."
                               f"{Fore.GREEN}[Activated]{Style.RESET_ALL}\n")
+
+                        # De-Activate relay after 5s
+                        time.sleep(5)
+                        ManageRelay.de_activate_relay(room_number)
 
         for card in removed_cards:
             if toHexString(card.atr) != self.MIFARE_CLASSIC_1K_ATR:
