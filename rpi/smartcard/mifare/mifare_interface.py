@@ -23,28 +23,28 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+__author__ = "Antonio Musarra"
+__copyright__ = "Copyright (c) 2022 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)"
+__credits__ = ["Antonio Musarra"]
+__version__ = "1.0.0"
+__license__ = "MIT"
+__maintainer__ = "Antonio Musarra"
+__email__ = "antonio.musarra@gmail.com"
+__status__ = "Development"
+
 import sys
 
-from colorama import Fore, Style
-from datetime import datetime
 
 import rpi.smartcard.mongodb.smart_card_access_crud as dbstore
 
-from rpi import version
+from colorama import Fore, Style
+from datetime import datetime
+from rpi.gpio.manage_relay import ManageRelay
 from smartcard.CardType import ATRCardType
 from smartcard.CardRequest import CardRequest
 from smartcard.Exceptions import CardRequestTimeoutException
 from smartcard.CardMonitoring import CardObserver
 from smartcard.util import toBytes, toHexString, toASCIIString
-
-__author__ = "Antonio Musarra"
-__copyright__ = "Copyright (c) 2022 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)"
-__credits__ = ["Antonio Musarra"]
-__version__ = version.__version__
-__license__ = "MIT"
-__maintainer__ = "Antonio Musarra"
-__email__ = "antonio.musarra@gmail.com"
-__status__ = "Development"
 
 
 class MifareClassicInterface(CardObserver):
@@ -344,6 +344,7 @@ class MifareClassicInterface(CardObserver):
                     # 1. Connect to the db
                     # 2. Check if document already exits
                     # 3. Update the document
+                    # 4. Activate the relay
                     db = dbstore.SmartCardAccessCrud()
 
                     search_filter = {"smartCardId": f"{uid}", "documentId": f"{identification_number}",
@@ -377,7 +378,8 @@ class MifareClassicInterface(CardObserver):
                         db.update_data(search_filter, update_document)
                         print(f"\tCheck if authorized to access...{Fore.GREEN}[Access Granted]{Style.RESET_ALL}\n")
                         print(f"\tActivate the relay for the room number {room_number}...")
-                        # @TODO Inserire il codice per il GPIO
+
+                        ManageRelay.activate_relay(room_number)
 
         for card in removed_cards:
             if toHexString(card.atr) != self.MIFARE_CLASSIC_1K_ATR:

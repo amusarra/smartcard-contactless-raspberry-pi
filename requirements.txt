@@ -4,3 +4,4 @@ pidfile==0.1.1
 pid==3.0.4
 pymongo==4.0.1
 colorama==0.4.4
+RPi.GPIO==0.7.1

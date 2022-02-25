@@ -4,7 +4,7 @@ from rpi import version
 setup(
     name='smartcard-contactless-raspberry-pi',
     version=version.__version__,
-    packages=['rpi', 'rpi.smartcard', 'rpi.smartcard.mifare', 'rpi.smartcard.mongodb'],
+    packages=['rpi', 'rpi.smartcard', 'rpi.smartcard.mifare', 'rpi.smartcard.mongodb', 'rpi.gpio'],
     url='https://www.dontesta.it',
     license='MIT',
     author='Antonio Musarra',

@@ -41,9 +41,11 @@ import rpi.smartcard.mifare.mifare_interface as mifare
 
 from pid.decorator import pidfile
 from rpi import version
+from rpi.gpio.manage_relay import ManageRelay
 from time import sleep
 from smartcard.CardMonitoring import CardMonitor
 from smartcard.util import toBytes
+
 
 # Setup parser argument
 parser = argparse.ArgumentParser(description='Smart Card Access Control tool.\n This tool is valid for MIFARE Classic '
@@ -85,12 +87,17 @@ def main():
     try:
         print_version_info()
 
+        # Initialize the GPIO for the relays module
+        ManageRelay.init_gpio()
+
+        # Instantiate the Mifare Classic Interface Object
         mifare_interface_observer = mifare.MifareClassicInterface(toBytes(authentication_key))
 
         print("Insert or remove a Smart Card in the reader.")
         print("Press ctrl+c to exit")
         print("")
 
+        # Add Card Monitor Observer to the Mifare Classic Interface
         card_monitor = CardMonitor()
         card_monitor.addObserver(mifare_interface_observer)
 
@@ -103,6 +110,9 @@ def main():
         # don't forget to remove observer, or the
         # monitor will poll forever...
         card_monitor.deleteObserver(mifare_interface_observer)
+
+        # Cleanup the GPIO resources
+        ManageRelay.cleanup()
 
 
 if __name__ == "__main__":
