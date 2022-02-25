@@ -2,7 +2,7 @@
 # coding=utf-8
 
 """
-Python script for Access control via Mifare Classic 1K Smart Card.
+Python scripts for Access control via Mifare Classic 1K Smart Card.
 
 MIT License
 Smart Card Contactless Raspberry Pi sample project
@@ -47,7 +47,9 @@ from smartcard.util import toBytes
 
 # Setup parser argument
 parser = argparse.ArgumentParser(description='Smart Card Access Control tool.\n This tool is valid for MIFARE Classic '
-                                             '1K cards. It must be used to access to the system')
+                                             '1K cards. It must be used to access to the system. '
+                                             'Once verified that the card is valid, the system will activate the relay'
+                                             ' to open the door corresponding to the assigned room.')
 parser.add_argument("-a", "--authentication-key", help='Authentication Key of Mifare Classic 1K.The authentication '
                                                        'keys are used to authenticate the particular sector of the '
                                                        'MIFARE Classic 1K memory card. Volatile authentication key '

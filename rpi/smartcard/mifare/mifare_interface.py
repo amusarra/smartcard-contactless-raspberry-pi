@@ -25,11 +25,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import sys
 
+from colorama import Fore, Style
+from datetime import datetime
+
+import rpi.smartcard.mongodb.smart_card_access_crud as dbstore
+
 from rpi import version
 from smartcard.CardType import ATRCardType
 from smartcard.CardRequest import CardRequest
 from smartcard.Exceptions import CardRequestTimeoutException
-from smartcard.CardConnectionObserver import ConsoleCardConnectionObserver
 from smartcard.CardMonitoring import CardObserver
 from smartcard.util import toBytes, toHexString, toASCIIString
 
@@ -69,10 +73,6 @@ class MifareClassicInterface(CardObserver):
         self.__authenticated = False
 
         self.__authentication_key = authentication_key
-
-        # Initialize the card observer that is notified
-        # when cards are inserted/removed from the system
-        self.__observer = ConsoleCardConnectionObserver()
 
     def authentication(self, card_connection_decorator=None):
         """
@@ -309,19 +309,78 @@ class MifareClassicInterface(CardObserver):
             return False
 
     def update(self, observable, actions):
+        """
+        The observable method. Monitor the insertion or removal of cards using the CardObserver interface.
+        To monitor card insertion and removal, create a CardObserver object that implements an update() method
+        that will be called upon card insertion/removal.
+
+        :param observable:
+        :param actions:
+        :return:
+        """
+
         (added_cards, removed_cards) = actions
+
         for card in added_cards:
+            if toHexString(card.atr) != self.MIFARE_CLASSIC_1K_ATR:
+                continue
+
+            # The createConnection method does not return the CardConnect but the CardConnectionDecorator object. For
+            # more info read https://pyscard.sourceforge.io/user-guide.html#card-connection-decorators
             card_connection_decorator = card.createConnection()
             if self.load_auth_key(card_connection_decorator=card_connection_decorator):
                 if self.authentication(card_connection_decorator):
-                    print(f"+Insert Card with UID {toHexString(self.get_uid(card_connection_decorator))}")
-                    print(f"\tGet Identification Number {toASCIIString(self.get_document_id(card_connection_decorator))}")
+                    uid = toHexString(self.get_uid(card_connection_decorator))
+                    identification_number = \
+                        toASCIIString(self.get_document_id(card_connection_decorator)).replace('.', '')
+
+                    print(f"{Fore.GREEN}+Insert Card with UID {uid}{Style.RESET_ALL}")
+                    print(f"\tGet Identification Number {identification_number}")
                     print("\tCheck if authorized to access...\n")
-                    # @TODO: Chiamata al database Mongo
-                else:
-                    print("Authentication failed")
-            else:
-                print("Load authentication key failed")
+
+                    # The code shown below should be abstracted, using interfaces, in order to eliminate the strong
+                    # coupling with the MongoDB store and GPIO
+
+                    # 1. Connect to the db
+                    # 2. Check if document already exits
+                    # 3. Update the document
+                    db = dbstore.SmartCardAccessCrud()
+
+                    search_filter = {"smartCardId": f"{uid}", "documentId": f"{identification_number}",
+                                     "smartCardEnabled": "true"}
+                    print(f"\tSearching entry on the MongoDB with filter {search_filter}...")
+
+                    # Document is an array of dictionary
+                    # In this case the returned document is always one
+                    document = db.read(search_filter)
+
+                    if len(document) == 0:
+                        print(f"\tCheck if authorized to access...{Fore.RED}[Access Denied]{Style.RESET_ALL}\n")
+                    else:
+                        count_access = int(document[0].get('countAccess'))
+                        first_access = document[0].get('firstAccess')
+                        last_access = document[0].get('lastAccess')
+                        room_number = document[0].get('roomNumber')
+
+                        if count_access == 0:
+                            first_access = datetime.utcnow().isoformat() + "Z"
+                            last_access = first_access
+
+                        if count_access > 0:
+                            last_access = datetime.utcnow().isoformat() + "Z"
+
+                        update_document = dict(modifiedDate=datetime.utcnow().isoformat() + "Z",
+                                               firstAccess=first_access,
+                                               lastAccess=last_access,
+                                               countAccess=count_access + 1)
+
+                        db.update_data(search_filter, update_document)
+                        print(f"\tCheck if authorized to access...{Fore.GREEN}[Access Granted]{Style.RESET_ALL}\n")
+                        print(f"\tActivate the relay for the room number {room_number}...")
+                        # @TODO Inserire il codice per il GPIO
 
         for card in removed_cards:
-            print(f"-Removed Cart ATR {toHexString(card.atr)}")
+            if toHexString(card.atr) != self.MIFARE_CLASSIC_1K_ATR:
+                continue
+
+            print(f"{Fore.RED}-Removed Cart ATR {toHexString(card.atr)}{Style.RESET_ALL}")

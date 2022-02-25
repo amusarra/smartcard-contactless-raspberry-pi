@@ -158,9 +158,9 @@ def main():
         search_filter = {"smartCardId": f"{uid}", "documentId": f"{identification_number}"}
         print(f"Searching entry on the MongoDB with filter {search_filter}...")
 
-        documents = db.read(search_filter)
+        document = db.read(search_filter)
 
-        if len(documents) == 0:
+        if len(document) == 0:
             print(f"Searching entry on the MongoDB with filter {search_filter}..."
                   f"{Fore.LIGHTYELLOW_EX}[Not Found]{Style.RESET_ALL}")
             new_document = dict(createDate=datetime.utcnow().isoformat() + "Z", firstname=f"{firstname}",
