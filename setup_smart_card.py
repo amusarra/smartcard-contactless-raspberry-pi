@@ -52,7 +52,6 @@ from smartcard.util import toBytes
 from smartcard.util import padd
 
 # Setup parser argument
-
 parser = argparse.ArgumentParser(description='Smart Card initialization tool.\n This tool is valid for MIFARE Classic '
                                              '1K cards. It must be used to initialize the card with the '
                                              'identification number of the identification document (example: identity '
@@ -68,7 +67,7 @@ parser.add_argument("-s", "--store-on-database", help='In this way will associat
                                                       'user.', action="store_true")
 parser.add_argument("-f", "--firstname", help='Firstname of the person to assign the Smart Card')
 parser.add_argument("-l", "--lastname", help='Lastname of the person to assign the Smart Card')
-parser.add_argument("-r", "--room-number", choices=['0', '1', '2', '3'], help='The room numer')
+parser.add_argument("-r", "--room-number", choices=['1', '2', '3', '4'], help='The room numer')
 
 args = parser.parse_args()
 
