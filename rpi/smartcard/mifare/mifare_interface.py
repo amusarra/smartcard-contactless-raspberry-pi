@@ -317,6 +317,7 @@ class MifareClassicInterface(CardObserver):
                     print(f"+Insert Card with UID {toHexString(self.get_uid(card_connection_decorator))}")
                     print(f"\tGet Identification Number {toASCIIString(self.get_document_id(card_connection_decorator))}")
                     print("\tCheck if authorized to access...\n")
+                    # @TODO: Chiamata al database Mongo
                 else:
                     print("Authentication failed")
             else:

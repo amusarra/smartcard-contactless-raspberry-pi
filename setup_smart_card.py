@@ -36,9 +36,14 @@ __email__ = "antonio.musarra@gmail.com"
 __status__ = "Development"
 
 import argparse
+import sys
+
 import art
 import rpi.smartcard.mifare.mifare_interface as mifare
+import rpi.smartcard.mongodb.smart_card_access_crud as dbstore
 
+from colorama import Fore, Back, Style
+from datetime import datetime
 from rpi import version
 from smartcard.util import toHexString
 from smartcard.util import toASCIIString
@@ -47,6 +52,7 @@ from smartcard.util import toBytes
 from smartcard.util import padd
 
 # Setup parser argument
+
 parser = argparse.ArgumentParser(description='Smart Card initialization tool.\n This tool is valid for MIFARE Classic '
                                              '1K cards. It must be used to initialize the card with the '
                                              'identification number of the identification document (example: identity '
@@ -58,6 +64,12 @@ parser.add_argument("-a", "--authentication-key", help='Authentication Key of Mi
                                                        'location is provided.', required=True)
 parser.add_argument("-i", "--document-id", help='Identity document number (example: identity card, driving license, '
                                                 'social security number, passport number)', required=True)
+parser.add_argument("-s", "--store-on-database", help='In this way will associate the Smart Card with the specific '
+                                                      'user.', action="store_true")
+parser.add_argument("-f", "--firstname", help='Firstname of the person to assign the Smart Card')
+parser.add_argument("-l", "--lastname", help='Lastname of the person to assign the Smart Card')
+parser.add_argument("-r", "--room-number", help='The room numer')
+
 args = parser.parse_args()
 
 # Get authentication key for Mifare Classic 1K Smart Card from program arguments
@@ -65,6 +77,12 @@ authentication_key = args.authentication_key
 
 # Get Identity document number from program arguments
 identification_number = args.document_id
+
+# Get data of the user data
+firstname = args.firstname
+lastname = args.lastname
+room_number = args.room_number
+store_on_db = args.store_on_database
 
 
 def print_version_info():
@@ -92,15 +110,15 @@ def main():
     mifare_interface = mifare.MifareClassicInterface()
     mifare_interface.card_request_and_connect()
 
-    uid = mifare_interface.get_uid()
+    uid = toHexString(mifare_interface.get_uid())
     reader = mifare_interface.get_reader()
 
     print(f"Smart Card Reader: {reader}")
-    print(f"Card UID {toHexString(uid)}\n")
+    print(f"Card UID: {uid}\n")
 
     if mifare_interface.load_auth_key(toBytes(authentication_key)):
         if mifare_interface.authentication():
-            print("Authentication successful\n")
+            print(f"{Fore.GREEN}Authentication successful{Style.RESET_ALL}\n")
             print(f"Get previous Identification Number {toASCIIString(mifare_interface.get_document_id())}")
             print(f"Try to store the new Identification Number {identification_number} into Smart Card...")
 
@@ -109,7 +127,8 @@ def main():
             )
 
             if result:
-                print(f"The new Identification Number {toASCIIString(mifare_interface.get_document_id())} stored!")
+                print(f"Try to store the new Identification Number {identification_number} into Smart Card..."
+                      f"{Fore.GREEN}[Stored]{Style.RESET_ALL}\n")
             else:
                 print(f"Error on store the Identification Number")
         else:
@@ -118,6 +137,44 @@ def main():
         print("Load authentication key failed")
 
     mifare_interface.disconnect()
+
+    # Check if store user data into MondoDB
+    if store_on_db:
+        if firstname is None or lastname is None:
+            print("The firstname and lastname must to be set")
+            sys.exit(1)
+
+        if room_number is None:
+            print("The room numer must to be set")
+            sys.exit(1)
+
+        print(f"Starting store data into MongoDB ({firstname}, {lastname}, Room Number: {room_number})...")
+
+        # 1. Connect to the db
+        # 2. Check if document already exits
+        # 3. Insert the document
+        db = dbstore.SmartCardAccessCrud()
+
+        search_filter = {"smartCardId": f"{uid}", "documentId": f"{identification_number}"}
+        print(f"Searching entry on the MongoDB with filter {search_filter}...")
+
+        documents = db.read(search_filter)
+
+        if len(documents) == 0:
+            print(f"Searching entry on the MongoDB with filter {search_filter}...[Not Found]")
+            new_document = dict(createDate=datetime.utcnow().isoformat() + "Z", firstname=f"{firstname}",
+                                lastname=f"{lastname}", documentId=f"{identification_number}", smartCardEnabled="true",
+                                smartCardId=f"{uid}", smartCardInitDate=datetime.utcnow().isoformat() + "Z",
+                                roomNumber=int(room_number), countAccess=0)
+
+            db.insert_data(new_document)
+            print(f"Starting store data into MongoDB ({firstname}, {lastname}, Room Number: {room_number})..."
+                  f"{Fore.GREEN}[Inserted]")
+        else:
+            print(f"Searching entry on the MongoDB with filter {search_filter}..."
+                  f"{Fore.LIGHTYELLOW_EX}[Already exits]")
+
+        print(f"{Fore.GREEN}\n-- Card initialized successfully and ready to use --")
 
 
 if __name__ == "__main__":
