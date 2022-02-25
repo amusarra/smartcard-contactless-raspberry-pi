@@ -381,8 +381,11 @@ class MifareClassicInterface(CardObserver):
 
                         ManageRelay.activate_relay(room_number)
 
+                        print(f"\tActivate the relay for the room number {room_number}..."
+                              f"{Fore.GREEN}[Activated]{Style.RESET_ALL}\n")
+
         for card in removed_cards:
             if toHexString(card.atr) != self.MIFARE_CLASSIC_1K_ATR:
                 continue
 
-            print(f"{Fore.RED}-Removed Cart ATR {toHexString(card.atr)}{Style.RESET_ALL}")
+            print(f"{Fore.RED}-Removed Card ATR {toHexString(card.atr)}{Style.RESET_ALL}")
