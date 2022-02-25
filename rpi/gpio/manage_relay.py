@@ -32,7 +32,23 @@ __maintainer__ = "Antonio Musarra"
 __email__ = "antonio.musarra@gmail.com"
 __status__ = "Development"
 
-import RPi.GPIO as GPIO
+# Replace libraries by fake ones when in dev environment
+try:
+    import RPi.GPIO as GPIO
+
+    dev_environment = False
+except (ImportError, RuntimeError):
+    dev_environment = True
+
+if dev_environment:
+    import sys
+    import fake_rpi
+
+    sys.modules['RPi'] = fake_rpi.RPi  # Fake RPi
+    sys.modules['RPi.GPIO'] = fake_rpi.RPi.GPIO  # Fake GPIO
+    sys.modules['smbus'] = fake_rpi.smbus  # Fake smbus (I2C)
+
+    import RPi.GPIO as GPIO
 
 
 class ManageRelay:
@@ -42,6 +58,7 @@ class ManageRelay:
     This class uses pyscard as a low-level interface to the NFC card,
     make sure your reader is compatible with this library.
     """
+
     def __init__(self):
         raise "This class is not instantiable. It only has static methods."
 
