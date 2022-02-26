@@ -67,6 +67,7 @@ request phase by the `access_via_smart_card.py` script.
 |:----------------------|:---------------------------------------------------------------------------------|:---------| 
 | UID                   | Smart Card ID assigned by the manufacturer. In this case we use the 4-byte NUID. | Byte(4)  |
 | Identification Number | Number (which can also be alphanumeric) of the guest's identity document.        | Byte(16) |
+
 Table 1 - Data that is stored on the Smart Card.
 
 Table 2 shows the data managed by the database (MondoDB). The scope column indicates which python script used (for 
@@ -90,6 +91,7 @@ updated when requesting access via the Smart Card.
 | countAccess       | setup_smart_card.py, access_via_smart_card.py | Number of successful accesses.                                            | Int                                                                       |
 | firstName         | setup_smart_card.py                           | Name of the guest to whom the Smart Card is assigned.                     | String                                                                    |
 | lastName          | setup_smart_card.py                           | Lastaname of the guest to whom the Smart Card is assigned.                | String                                                                    |
+
 Table 2 - Data that is stored on the database (MongoDB).
 
 
