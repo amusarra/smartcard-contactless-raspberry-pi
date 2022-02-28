@@ -55,8 +55,8 @@ class ManageRelay:
     """
     The Python interface to manage relay module via GPIO
 
-    This class uses pyscard as a low-level interface to the NFC card,
-    make sure your reader is compatible with this library.
+    This class uses GPIO as a low-level interface to the GPIO
+    Raspberry Pi.
     """
 
     def __init__(self):

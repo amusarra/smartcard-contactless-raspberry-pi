@@ -2,9 +2,9 @@
 [![Antonio Musarra's Blog](https://img.shields.io/badge/maintainer-Antonio_Musarra's_Blog-purple.svg?colorB=6e60cc)](https://www.dontesta.it)
 [![Twitter Follow](https://img.shields.io/twitter/follow/antonio_musarra.svg?style=social&label=%40antonio_musarra%20on%20Twitter&style=plastic)](https://twitter.com/antonio_musarra)
 
-This is a project linked to an article that I will shortly publish on my [blog](https://www.dontesta.it). What is described 
-in this README it should be enough to make you understand the intentions of this project, the rest I leave to your 
-curiosity.
+This is a project linked to an article that I will shortly publish on my [blog](https://www.dontesta.it). What is 
+described in this README should be enough to make you understand the intentions of this project, I leave the rest 
+to your curiosity.
 
 This project was born with the aim of providing a complete example (hardware and software) on how it is possible to 
 create a simple access system using contactless Smart Cards and the Raspberry Pi. The figure below shows the hardware 
