@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/deployment-diagram
+title
+**Deployment diagram of the Access System via Smart Card Contactless**
+
+end title
+
+person Receptionist as rcpt
+person Guest as guest
+node "Smart Card Reader" as scr
+card "MIFARE Classic 1K" as mifare
+
+node "Raspberry Pi 4" as rpi {
+    component "Bash Console" as cli
+    frame "Raspberry Pi Smart Card Contactless Access System Software"  {
+        component "Smart Card Access System" as scas {
+            file "setup_smart_card.py"
+            file "access_via_smart_card.py"
+        }
+        component "Pyscard"
+        component "RPi.GPIO"
+        component "PyMongo"
+    }
+
+    frame "Docker System" {
+        component "MongoDB Container" as db {
+            database SmartCardAccessCrudDB {
+                collections SmartCardAccess
+            }
+        }
+    }
+}
+
+rpi ===== scr: <<USB>>
+mifare --> scr: <<RFID>>
+rcpt .... mifare: <<to setup>>
+guest .... mifare: <<to access request>>
+scas ...> db: <<usa>>
+rcpt ... cli: <<usa>>
+@enduml

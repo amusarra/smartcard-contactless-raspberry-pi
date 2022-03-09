@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title
+**Sequence diagram of the entry point Access via Smart Card**
+(script access_via_smart_card.py)
+end title
+
+autonumber
+participant "Application Process \n(Access via Smart Card)" as ap
+participant "Manage Relay" as mr
+participant "Mifare Classic Interface" as mci
+participant "Card Monitor" as cm
+participant "Smart Card Access Crud (Database)" as crud
+
+alt try...except...finally
+    ap -> mr: ManageRelay.init_gpio()
+    mr --> ap
+
+    ap -> mci: mifare.MifareClassicInterface(authentication_key)
+    activate mci
+    mci -> mci: __init__(self, authentication_key)
+    note right
+    Initialize and connect to the Smart Card.
+    The interface is set up so that it only accepts cards of type
+    MIFARE Classic 1K with ATR:
+    **3B 8F 80 01 80 4F 0C A0 00 00 03 06 03 00 01 00 00 00 00 6A**
+    end note
+    mci --> ap
+
+    ap -> cm: CardMonitor()
+    activate cm
+    cm --> ap
+    ap -> cm: card_monitor.addObserver(mifare_interface_observer)
+    cm --> ap
+    autonumber stop
+    opt#Gray "On Added or Removed Smart Card"
+        autonumber 1.0
+        note over ap
+            This block (and in particular the update() method) is
+            called by the Card Monitor when an event of adding
+            or removing Smart Cards from the reader occurs.
+        end note
+        cm -> mci: update(self, observable, actions)
+        mci -> mci: load_auth_key(card_connection_decorator)
+        mci -> mci: authentication(card_connection_decorator)
+        mci -> mci: get_uid(card_connection_decorator)
+        mci -> mci: get_document_id(card_connection_decorator)
+        mci -> crud:  db = dbstore.SmartCardAccessCrud()
+        activate crud
+        crud --> mci
+        mci -> crud: db.read(search_filter)
+        opt#Brown "document.size() == 1"
+            mci -> crud: db.update_data(search_filter, update_document)
+            crud --> mci
+            deactivate crud
+            mci -> mr: ManageRelay.activate_relay(room_number)
+            mr --> mci
+            mci -> mci: time.sleep(5)
+            mci -> mr: ManageRelay.de_activate_relay(room_number)
+            mr --> mci
+        else "document.size() == 0"
+            mci -> ap: print("Access Denied")
+        end
+        autonumber stop
+    end
+    autonumber 10
+
+    loop#Green true
+        ap -> ap: sleep(1)
+    end
+else keyboardInterrupt
+    ap -> ap: print("Goodbye")
+else #Orange finally
+    ap -> cm: card_monitor.deleteObserver(mifare_interface_observer)
+    cm --> ap
+    deactivate cm
+    deactivate mci
+    ap -> mr: ManageRelay.cleanup()
+    mr --> ap
+end
+@enduml
