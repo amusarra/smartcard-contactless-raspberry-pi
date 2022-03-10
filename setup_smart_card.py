@@ -106,6 +106,7 @@ def main():
     """
     print_version_info()
 
+    error_on_card = False
     mifare_interface = mifare.MifareClassicInterface()
     mifare_interface.card_request_and_connect()
 
@@ -129,16 +130,19 @@ def main():
                 print(f"Try to store the new Identification Number {identification_number} into Smart Card..."
                       f"{Fore.GREEN}[Stored]{Style.RESET_ALL}\n")
             else:
+                error_on_card = True
                 print(f"Error on store the Identification Number")
         else:
+            error_on_card = True
             print("Authentication failed")
     else:
+        error_on_card = True
         print("Load authentication key failed")
 
     mifare_interface.disconnect()
 
     # Check if store user data into MondoDB
-    if store_on_db:
+    if store_on_db and not error_on_card:
         if firstname is None or lastname is None:
             print("The firstname and lastname must to be set")
             sys.exit(1)
