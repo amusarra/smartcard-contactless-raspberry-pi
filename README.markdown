@@ -116,7 +116,7 @@ Figure 4 shows the wiring diagram for connecting the four relay module to the GP
 remember that the Smart Card reader is connected via USB to the Raspberry Pi 4, for this reason it has not been 
 included in the wiring diagram.
 
-![Wiring diagram Raspberry Pi and Relays Module](docs/images/wiring_diagram_solution.png)
+![Wiring diagram Raspberry Pi and Relays Module](docs/images/schematic_smart_card_contactless_raspberry_pi.png)
 
 Figure 4 - Wiring diagram Raspberry Pi and Relays Module
 
