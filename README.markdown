@@ -247,9 +247,9 @@ processes indicated above clearer.
 
 ![Run Smart Card Init Tool](docs/images/gif/setup_mifare_classic_1k_smart_card_speed_x2.gif)
 
-Animation 1 - Smart Card Init tool in action
+Animation 1 - Smart Card Init tool in action (on asciinema https://asciinema.org/a/475795)
 
 
 ![Run Smart Card Access Tool](docs/images/gif/access_control_mifare_classic_1k_smart_card_speed_x2.gif)
 
-Animation 2 - Smart Card Access tool in action
+Animation 2 - Smart Card Access tool in action (on asciiname https://asciinema.org/a/475797)
