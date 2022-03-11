@@ -241,3 +241,15 @@ Figure 2 - Run the Smart Card Access Tool
 }
 ```
 Console 5 - Data display to check for updates following accesses
+
+The following two animations show the Smart Tool Init and the Smart Card Access Tool in action, making the operation and 
+processes indicated above clearer.
+
+![Run Smart Card Init Tool](docs/images/gif/setup_mifare_classic_1k_smart_card_speed_x2.gif)
+
+Animation 1 - Smart Card Init tool in action
+
+
+![Run Smart Card Access Tool](docs/images/gif/access_control_mifare_classic_1k_smart_card_speed_x2.gif)
+
+Animation 2 - Smart Card Access tool in action
