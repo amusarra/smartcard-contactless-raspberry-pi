@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Security
 
+## [1.0.1.dev1] - 2024-07-07
+
+### Added
+- Added the search functionality to the documentation
+
 ## [1.0.1.dev0] - 2024-07-07
 
 ### Added
