@@ -1,0 +1,61 @@
+Adesso che il **cosa** è chiaro, vediamo il **come**, rispondendo alle
+domande a seguire:
+
+1.  Quale linguaggio usare per implementare lo scenario che abbiamo
+    descritto all'inizio dell'articolo? **Python**
+2.  Esiste qualche libreria Python per la costruzione di applicazioni
+    basate su Smart Card?
+    <a href="https://pyscard.sourceforge.io/index.html" target="_blank"
+    rel="noopener"><strong>Pyscard</strong></a>
+3.  Quale tipo di database usare per la memorizzazione dei dati?
+    <a href="https://www.mongodb.com/" target="_blank"
+    rel="noopener"><strong>MongoDB</strong></a>
+    (<a href="https://it.wikipedia.org/wiki/NoSQL" target="_blank"
+    rel="noopener">NoSQL</a> database)
+4.  Esiste qualche libreria Python per operare con MongoDB?
+    <a href="https://pymongo.readthedocs.io/en/stable/" target="_blank"
+    rel="noopener"><strong>PyMongo</strong></a>
+5.  Esiste qualche libreria Python per interagire con l'interfaccia GPIO
+    del Raspberry
+    Pi? **<a href="https://pypi.org/project/RPi.GPIO/" target="_blank"
+    rel="noopener"><span class="pl-v">RPi</span>.<span
+    class="pl-v">GPIO</span></a>**
+
+Da questa lista le cose da fare sono parecchie e lo spazio per vederle
+tutte nel dettaglio in questo articolo non c'è. Direi quindi di
+focalizzare la nostra attenzione sui componenti da realizzare rimanendo
+ad alto livello, senza scendere nello specifico del codice.
+
+**Non vi allarmate!** Il progetto è già stato sviluppato prima di
+scrivere questo articolo e disponibile sul mio repository GitHub
+<a href="https://github.com/amusarra/smartcard-contactless-raspberry-pi"
+target="_blank" rel="noopener">Smart Card Contactless Raspberry Pi</a>.
+
+**Nota su MongoDB**. È necessario preparare un'istanza di MongoDB sul
+proprio Raspberry Pi affinché la soluzione funzioni nel modo corretto.
+Le scelte sono due: container docker o installazione classica
+direttamente sul sistema operativo. Personalmente ho scelto la strada di
+Docker (vedi 6. Requisiti Software), per cui, una volta
+<a href="https://docs.docker.com/engine/install/debian/" target="_blank"
+rel="noopener">installato Docker sul proprio Raspberry Pi OS</a>, i
+passi per tirare su un'istanza MongoDB 4.4.12 sono quelli indicati a
+seguire.
+
+```bash
+# 1. Docker pull e run MongoDB 4.4.12
+docker pull mongo:4.4.12
+docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:4.4.12
+
+# 2. Verifica che l'istanza sia su e accesso alla console bash (task opzionale)
+docker exec -it mongodb bash
+
+# 3. Avvio della console MongoDB (task opzionale)
+root@0d21da235b0d:/# mongo
+```
+**Console 1** - Pull dell'immagine MongoDB 4.4.12 e run del container
+
+Nel caso in cui preferiate perseguire la seconda strada, il blog di
+MongoDB riporta la procedura completa sull'articolo <a
+href="https://www.mongodb.com/developer/how-to/mongodb-on-raspberry-pi/"
+target="_blank" rel="noopener">Install &amp; Configure MongoDB on the
+Raspberry Pi</a>.

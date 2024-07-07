@@ -1,0 +1,116 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+# Project information
+site_name: "Raspberry Pi e Smart Card Mifare Classic 1K"
+site_url: https://amusarra.github.io/smartcard-contactless-raspberry-pi/
+site_author: Antonio Musarra
+site_description: >-
+  Guida pratica per realizzare un sistema di autenticazione
+  con smart card contactless su Raspberry Pi
+
+# Repository information
+repo_name: amusarra/smartcard-contactless-raspberry-pi
+repo_url: https://github.com/amusarra/smartcard-contactless-raspberry-pi
+
+# Copyright information
+copyright: Copyright &copy; 2009 - 2024 Antonio Musarra
+
+# Configuration
+theme:
+  name: "material"
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  language: it
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.tabs
+    - navigation.tabs.sticky
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/amusarra
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/amusarra/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/amusarra
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/u/amusarra
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UC5D3_EtVPbZYUhrUcEK_THA
+
+plugins:
+  - social
+  - minify:
+      minify_html: true
+
+nav:
+  - Informazioni: index.md
+  - Quick Start:
+      - Introduzione: guida/introduzione.md
+      - Descrizione Scenario: guida/descrizione_scenario.md
+      - Dettagli MIFARE Classic 1K: guida/dettagli_mifare_classic_1k.md
+      - I misteriosi pacchetti APDU: guida/misteriosi_pacchetti_apdu.md
+      - Cos’è l’Answer to reset o ATR: guida/atr.md
+      - Requisiti Hardware: guida/requisiti_hardware.md
+      - Requisiti Software: guida/requisiti_software.md
+  - Implementazione:
+      - Schema elettrico della soluzione: guida/schema_elettrico.md
+      - Progettare il software: guida/progettare_software.md
+      - Implementare il software: guida/implementare_software.md
+      - Cos’è Pyscard: guida/pyscard.md
+      - Struttura del progetto software: guida/struttura_progetto.md
+  - Deploy:
+    - Installazione e test: guida/deploy_test_software_on_rpi.md
+  - Conclusioni: guida/conclusioni.md
+  - Risorse: guida/risorse.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - md_in_html
+  - attr_list
+  - def_list
+  - abbr
+  - toc:
+      permalink: true
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
