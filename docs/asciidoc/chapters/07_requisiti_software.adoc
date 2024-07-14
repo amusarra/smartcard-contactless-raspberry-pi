@@ -1,0 +1,15 @@
+<<<
+== Requisiti software
+Così come abbiamo bisogno dell'hardware, è necessario che siano soddisfatti una serie di requisiti software, quali:
+
+1.  https://www.raspberrypi.com/documentation/computers/os.html#introduction[Raspberry Pi OS (64bit)]
+2.  https://www.raspberrypi.com/documentation/computers/os.html#python[Python 3.9.x] (distribuito e installato di default
+con Raspberry Pi OS)
+3.  https://docs.docker.com/engine/install/debian/[Docker 20.10.12]
+4.  https://packages.debian.org/bullseye/build-essential[Development Tools (make, gcc) (install or update via `sudo apt install build-essential`)]
+
+Per questo genere di scenari non è assolutamente necessario provvedere all'installazione del sistema operativo in versione Desktop, consiglio pertanto di preparare e usare l'immagine di https://www.raspberrypi.com/software/operating-systems/[Raspberry Pi OS Lite (64bit)]. Per coloro che avessero bisogno di una guida su come installare questo sistema operativo, consiglio di seguire la guida ufficiale https://www.raspberrypi.com/documentation/computers/getting-started.html#installing-the-operating-system[Installing the Operating System].
+
+L'installazione di Docker potrebbe essere anche opzionale; personalmente preferisco installare il database in forma di container. Più in avanti vedremo quale database ho scelto per questa soluzione.
+
+Per approfondimenti sul tema Docker, consiglio la lettura del libro https://amzn.to/3tiyO1W[Docker:Sviluppare e rilasciare software tramite container] di https://www.linkedin.com/in/serena-sensini/[Serena Sensini] e la visione delle https://www.youtube.com/watch?v=wAyUdtQF05w[Pillole di Docker] sul canale YouTube di https://www.linkedin.com/in/mauro-cicolella-0b107076/[Mauro Cicolella].

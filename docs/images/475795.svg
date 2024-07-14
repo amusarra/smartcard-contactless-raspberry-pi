@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1221.38333285" height="746.6664800000001" font-family="Consolas, Menlo, 'Bitstream Vera Sans Mono', monospace, 'Powerline Symbols'" font-size="14px">
+  <style>
+    .br { font-weight: bold }
+    .fa { fill-opacity: 0.5 }
+    .it { font-style: italic }
+    .un { text-decoration: underline }
+  </style>
+
+  <rect width="100%" height="100%" style="fill: #121314" rx="4" ry="4"></rect>
+
+  <svg x="8.42333333" y="9.333331000000001" class="default-text-fill">
+    <g style="shape-rendering: optimizeSpeed">
+
+        <rect x="0.0" y="709.333156" width="8.42333333" height="18.666662000000002" style="fill: #4ebf22"></rect>
+
+
+    </g>
+
+    <text style="fill: #cccccc">
+      <tspan y="0.0">
+        <tspan dy="1em" x="202.15999992000002">
+In this way will associate the Smart Card with the specific user.
+        </tspan>
+      </tspan><tspan y="18.666662000000002">
+        <tspan dy="1em" x="16.84666666">
+-f FIRSTNAME, --firstname FIRSTNAME
+        </tspan>
+      </tspan><tspan y="37.333324000000005">
+        <tspan dy="1em" x="202.15999992000002">
+Firstname of the person to assign the Smart Card
+        </tspan>
+      </tspan><tspan y="55.99998600000001">
+        <tspan dy="1em" x="16.84666666">
+-l LASTNAME, --lastname LASTNAME
+        </tspan>
+      </tspan><tspan y="74.66664800000001">
+        <tspan dy="1em" x="202.15999992000002">
+Lastname of the person to assign the Smart Card
+        </tspan>
+      </tspan><tspan y="93.33331000000001">
+        <tspan dy="1em" x="16.84666666">
+-r {1,2,3,4}, --room-number {1,2,3,4}
+        </tspan>
+      </tspan><tspan y="111.99997200000001">
+        <tspan dy="1em" x="202.15999992000002">
+The room numer
+        </tspan>
+      </tspan><tspan y="130.66663400000002">
+        <tspan dy="1em" x="0.0" class="br" style="fill: #4ebf22">
+amusarra@raspberrypi-amusarra
+        </tspan><tspan x="244.27666657">
+:
+        </tspan><tspan x="252.6999999" class="br" style="fill: #26b0d7">
+~/smartcard-contactless-raspberry-pi $
+        </tspan><tspan x="581.20999977">
+./setup_smart_card.py -a FFFFFFFFFFFF -i MSRNHTG56X -s -f Antonio -l Musar
+        </tspan>
+      </tspan><tspan y="149.33329600000002">
+        <tspan dy="1em" x="0.0">
+ra -r 1
+        </tspan>
+      </tspan><tspan y="167.99995800000002">
+        <tspan dy="1em" x="8.42333333">
+____
+        </tspan><tspan x="269.54666656">
+_
+        </tspan><tspan x="328.50999987">
+____
+        </tspan><tspan x="522.24666646">
+_
+        </tspan><tspan x="555.93999978">
+___
+        </tspan><tspan x="657.01999974">
+_
+        </tspan><tspan x="682.28999973">
+_
+        </tspan><tspan x="732.82999971">
+_____
+        </tspan><tspan x="909.71999964">
+_
+        </tspan>
+      </tspan><tspan y="186.66662000000002">
+        <tspan dy="1em" x="0.0">
+/ ___|
+        </tspan><tspan x="67.38666664">
+_ __ ___
+        </tspan><tspan x="168.4666666">
+__ _
+        </tspan><tspan x="219.00666658">
+_ __ | |_
+        </tspan><tspan x="320.08666654">
+/ ___|
+        </tspan><tspan x="387.47333318">
+__ _
+        </tspan><tspan x="438.01333316">
+_ __
+        </tspan><tspan x="496.97666647">
+__| | |_ _| _ __
+        </tspan><tspan x="648.59666641">
+(_)| |_
+        </tspan><tspan x="724.40666638">
+|_
+        </tspan><tspan x="766.52333303">
+_|
+        </tspan><tspan x="800.21666635">
+___
+        </tspan><tspan x="859.17999966">
+___
+        </tspan><tspan x="901.29666631">
+| |
+        </tspan>
+      </tspan><tspan y="205.33328200000003">
+        <tspan dy="1em" x="0.0">
+\___ \ | &#39;_ ` _ \
+        </tspan><tspan x="160.04333327">
+/ _` || &#39;__|| __| | |
+        </tspan><tspan x="379.04999985">
+/ _` || &#39;__| / _` |
+        </tspan><tspan x="555.93999978">
+| | | &#39;_ \ | || __|
+        </tspan><tspan x="741.25333304">
+| |
+        </tspan><tspan x="791.79333302">
+/ _ \
+        </tspan><tspan x="850.75666633">
+/ _ \ | |
+        </tspan>
+      </tspan><tspan y="223.99994400000003">
+        <tspan dy="1em" x="8.42333333">
+___) || | | | | || (_| || |
+        </tspan><tspan x="261.12333323">
+| |_
+        </tspan><tspan x="311.66333321">
+| |___ | (_| || |
+        </tspan><tspan x="480.12999981">
+| (_| |
+        </tspan><tspan x="555.93999978">
+| | | | | || || |_
+        </tspan><tspan x="741.25333304">
+| |
+        </tspan><tspan x="783.36999969">
+| (_) || (_) || |
+        </tspan>
+      </tspan><tspan y="242.66660600000003">
+        <tspan dy="1em" x="0.0">
+|____/ |_| |_| |_| \__,_||_|
+        </tspan><tspan x="269.54666656">
+\__|
+        </tspan><tspan x="320.08666654">
+\____| \__,_||_|
+        </tspan><tspan x="488.55333314">
+\__,_| |___||_| |_||_| \__|
+        </tspan><tspan x="741.25333304">
+|_|
+        </tspan><tspan x="791.79333302">
+\___/
+        </tspan><tspan x="850.75666633">
+\___/ |_|
+        </tspan>
+      </tspan><tspan y="298.66659200000004">
+        <tspan dy="1em" x="0.0">
+Version: 1.0.0.dev0
+        </tspan>
+      </tspan><tspan y="317.333254">
+        <tspan dy="1em" x="0.0">
+Copyright (c) 2022 Antonio Musarra &lt;antonio.musarra@gmail.com&gt;
+        </tspan>
+      </tspan><tspan y="335.99991600000004">
+        <tspan dy="1em" x="0.0">
+Antonio Musarra&#39;s Blog - https://www.dontesta.it
+        </tspan>
+      </tspan><tspan y="354.666578">
+        <tspan dy="1em" x="0.0">
+GitHub Project https://github.com/amusarra/smartcard-contactless-raspberry-pi
+        </tspan>
+      </tspan><tspan y="373.33324000000005">
+        <tspan dy="1em" x="0.0">
+---
+        </tspan>
+      </tspan><tspan y="410.66656400000005">
+        <tspan dy="1em" x="0.0">
+Waiting for the Mifare Classic 1K...
+        </tspan>
+      </tspan><tspan y="429.333226">
+        <tspan dy="1em" x="0.0">
+Smart Card Reader: BIT4ID miniLector AIR NFC v3 [miniLector AIR DI v3 CLESS] 00 00
+        </tspan>
+      </tspan><tspan y="447.99988800000006">
+        <tspan dy="1em" x="0.0">
+Card UID: B4 90 90 1E
+        </tspan>
+      </tspan><tspan y="485.33321200000006">
+        <tspan dy="1em" x="0.0" style="fill: #4ebf22">
+Authentication successful
+        </tspan>
+      </tspan><tspan y="522.6665360000001">
+        <tspan dy="1em" x="0.0">
+Get previous Identification Number MSRN769BDC......
+        </tspan>
+      </tspan><tspan y="541.333198">
+        <tspan dy="1em" x="0.0">
+Try to store the new Identification Number MSRNHTG56X into Smart Card...
+        </tspan>
+      </tspan><tspan y="559.99986">
+        <tspan dy="1em" x="0.0">
+Try to store the new Identification Number MSRNHTG56X into Smart Card...
+        </tspan><tspan x="606.47999976" style="fill: #4ebf22">
+[Stored]
+        </tspan>
+      </tspan><tspan y="597.3331840000001">
+        <tspan dy="1em" x="0.0">
+Starting store data into MongoDB (Antonio, Musarra, Room Number: 1)...
+        </tspan>
+      </tspan><tspan y="615.999846">
+        <tspan dy="1em" x="0.0">
+Searching entry on the MongoDB with filter {&#39;smartCardId&#39;: &#39;B4 90 90 1E&#39;, &#39;documentId&#39;: &#39;MSRNHTG56X&#39;}...
+        </tspan>
+      </tspan><tspan y="634.666508">
+        <tspan dy="1em" x="0.0">
+Searching entry on the MongoDB with filter {&#39;smartCardId&#39;: &#39;B4 90 90 1E&#39;, &#39;documentId&#39;: &#39;MSRNHTG56X&#39;}...
+        </tspan><tspan x="876.02666632" style="fill: #ddaf3c">
+[Not Found]
+        </tspan>
+      </tspan><tspan y="653.33317">
+        <tspan dy="1em" x="0.0">
+Starting store data into MongoDB (Antonio, Musarra, Room Number: 1)...
+        </tspan><tspan x="589.6333331" style="fill: #4ebf22">
+[Inserted with id: 622a6f24dfac86ccb94e16bf]
+        </tspan>
+      </tspan><tspan y="690.6664940000001">
+        <tspan dy="1em" x="0.0" style="fill: #4ebf22">
+-- Card initialized successfully and ready to use --
+        </tspan>
+      </tspan>
+    </text>
+  </svg>
+
+  <g transform="translate(-40 -40)">
+    <svg x="50%" y="50%" width="80" height="80">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.0 1000.0" style="filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.4))">
+  <defs>
+    <mask id="small-triangle-mask">
+      <rect width="100%" height="100%" fill="white"></rect>
+      <polygon points="700.0 500.0, 400.00000000000006 326.7949192431122, 399.9999999999999 673.2050807568877" fill="black">
+      </polygon>
+    </mask>
+  </defs>
+  <polygon points="1000.0 500.0, 250.0000000000001 66.98729810778059, 249.99999999999977 933.0127018922192" mask="url(#small-triangle-mask)" fill="white">
+  </polygon>
+  <polyline points="673.2050807568878 400.0, 326.7949192431123 600.0" stroke="white" stroke-width="90">
+  </polyline>
+</svg>
+    </svg>
+  </g>
+</svg>

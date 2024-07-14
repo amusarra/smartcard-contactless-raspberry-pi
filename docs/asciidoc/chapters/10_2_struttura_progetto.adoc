@@ -1,0 +1,46 @@
+<<<
+=== Struttura del progetto
+Adesso che abbiamo visto dalla superficie cos'è Pyscard e per cosa sarà utile, cerchiamo di disegnare la struttura del nostro progetto che implementerà lo scenario introdotto a inizio articolo.
+
+Il diagramma (in notazione UML) di figura 19 mostra package, component e classi utilizzati per l'implementazione dello scenario che abbiamo descritto a inizio articolo. Gli elementi del diagramma del nostro progetto sono quelli evidenziati con il colore giallo ocra e in particolare:
+
+**Classi**
+
+- https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/rpi/gpio/manage_relay.py[ManageRelay] (manage_relay.py). Classe che gestisce attraverso l'interfaccia GPIO l'attivazione e disattivazione dei quattro relè, nonché l'inizializzazione della stessa interfaccia GPIO.
+- https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/rpi/smartcard/mongodb/smart_card_access_crud.py[SmartCardAccessCrud] (smart_card_access_crud.py). Classe che gestisce le operazioni CRUD sul database NoSQL MongoDB.
+- https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/rpi/smartcard/mifare/mifare_interface.py[MifareClassicInterface] (mifare_interface.py). Classe che gestisce la comunicazione con il lettore di Smart Card e di conseguenza d'interagire con la Smart Card connessa. Le operazioni gestite sono: autenticazione, lettura ATR, lettura UID, lettura dalla memoria della carta e scrittura sulla memoria della carta.
+
+**Component**
+
+- https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/setup_smart_card.py[Setup Smart Card] (setup_smart_card.py). Script Python che rappresenta l'entry point responsabile del setup della Smart Card e memorizzazione dei dati anagrafici dell'ospite sul database MongoDB. Questo script deve ricevere in input i parametri necessari per eseguire il setup della Smart Card.
+- https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/access_via_smart_card.py[Access via Smart Card] (access_via_smart_card.py). Script Python che rappresenta l'entry point responsabile di governare l'apertura delle porte (attraverso l'attivazione dei relè) sulla base della validazione dei dati estratti dalla Smart Card. Questo script deve ricevere in input la chiave di autenticazione della Smart Card.
+
+image::smartcard-contactless-raspberry-pi-uml-diagram-scaled.jpg[title="Figura 19 - Package/Component/Class diagram del progetto Smart Card Contactless Raspberry Pi"]
+
+Il package *smartcard* (in verde) fa parte di Pyscard, e i componenti all'interno sono utilizzati per sfruttare il monitoraggio delle Smart Card. Utilizzando l'interfaccia https://pyscard.sourceforge.io/epydoc/smartcard.CardMonitoring.CardObserver-class.html[CardObserver] siamo in grado di poter sapere quando la Smart Card viene aggiunta (appoggiata sul lettore) o rimossa (dal raggio di azione del segnale RF).
+
+Il sequence diagram di figura 20 descrive lo scenario del setup della Smart Card (vedi Figura 2 - Processo semplificato di accoglienza dell'ospite in hotel), mostrando le azioni principali e gli eventuali flussi alternativi. Sempre da questo diagramma possiamo vedere le relazioni che intercorrono, in termini di messaggi, tra i vari attori, quest'ultimi sono stati descritti in precedenza e mostrati nel diagramma di figura 19.
+
+Le azioni decisamente più importanti sono quelle che riguardano l'invio dei comandi APDU, che riassumendo sono:
+
+1.  https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/f9ae78638f3eb277ebfc7951fea436da2c6bee44/rpi/smartcard/mifare/mifare_interface.py#L238[Load Authentication Key sulla memoria volatile]
+2.  https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/f9ae78638f3eb277ebfc7951fea436da2c6bee44/rpi/smartcard/mifare/mifare_interface.py#L78[Autenticazione per accedere al primo blocco del settore uno della MIFARE Classic 1K]
+3.  https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/f9ae78638f3eb277ebfc7951fea436da2c6bee44/rpi/smartcard/mifare/mifare_interface.py#L213[Richiesta UID]
+4.  https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/f9ae78638f3eb277ebfc7951fea436da2c6bee44/rpi/smartcard/mifare/mifare_interface.py#L172[Lettura dell'eventuale precedente documentId (numero identificativo del documento di riconoscimento)]
+5.  https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/f9ae78638f3eb277ebfc7951fea436da2c6bee44/rpi/smartcard/mifare/mifare_interface.py#L286[Salvataggio del documentId]
+
+I link della precedente lista riportano direttamente sul metodo specifico della classe https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/rpi/smartcard/mifare/mifare_interface.py[Mifare Classic Interface] all'interno del quale è specificato il contenuto dell'APDU inviata.
+
+image::setup_smart_card_sequence.png[title="Figura 20 - Diagramma di sequenza dell&#39;entry point Setup Smart Card"]
+
+Nella fase di setup della Smart Card, prima di inserire i dati anagrafici dell'ospite sul database, viene eseguita la query utilizzando il filtro `{"smartCardId": "f{uid}", "documentId": f"{identification_number}"}`, in modo che sia possibile verificare che non esista già un documento con l'associazione smartCardId e documentId (fare riferimento allo step 33 del sequence diagram di figura 20).
+
+Il sequence diagram di figura 21 descrive lo scenario di Accesso alla stanza tramite Smart Card (vedi Figura 3 - Processo di accesso alla stanza), mostrando le azioni principali e gli eventuali flussi alternativi. Sempre da questo diagramma possiamo vedere le relazioni che intercorrono, in termini di messaggi, tra i vari attori, quest'ultimi sono stati descritti in precedenza e mostrati nel diagramma di figura 19.
+
+In questo diagramma, tra gli attori in gioco abbiamo anche il componente https://pyscard.sourceforge.io/epydoc/smartcard.CardMonitoring.CardMonitor-class.html[Card Monitor] di Pyscard, che abbiamo utilizzato per aggiungere la nostra interfaccia https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/rpi/smartcard/mifare/mifare_interface.py#L51[Mifare Classic Interface] come observable, in questo modo il Card Monitor richiamerà il metodo https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/f9ae78638f3eb277ebfc7951fea436da2c6bee44/rpi/smartcard/mifare/mifare_interface.py#L312[update(self, observable, actions)] nel momento in cui si verificheranno gli eventi di aggiunta o rimozione della Smart Card. Il metodo update implementa quando descritto in Figura 16 - Mind Map sugli aspetti funzionali che il software dovrà implementare, di cui le azioni sono evidenti sul sequence diagram a seguire.
+
+image::access_via_smart_card_sequence-1.png[title="*Figura 21* - Diagramma di sequenza per l&#39;entry point Access via Smart Card"]
+
+I dati sono estratti dal database MongoDB utilizzando il filtro `{"smartCardId": f"{uid}", "documentId":f{identification_number}", "smartCardEnabled": "true"}`, nel caso non ci siano documenti che rispettino questo filtro, il sistema negherà l'accesso, alternativamente, sarà aggiornato il documento su MongDB e attivato il relè corrispondente al numero della stanza associato all'ospite (fare riferimento allo step 1.7 del sequence diagram di figura 21).
+
+Molto bene! Una volta descritti i sequence diagram dei nostri due scenari, direi che potremmo passare all'azione, ovvero, eseguire il deploy dell'applicazione sul Raspberry Pi 4.

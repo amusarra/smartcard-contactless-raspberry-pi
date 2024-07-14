@@ -1,0 +1,25 @@
+:author: Antonio Musarra
+:revnumber: 1.0.1
+:revdate: Luglio 11, 2024
+:email: antonio.musarra@gmail.com
+:description: Le Smart Card fanno parte ormai da tempo del nostro \
+quotidiano: dalla SIM (Subscriber Identity Module) del cellulare, alla \
+carta di credito, come sistema di fidelizzazione, per accedere ai locali \
+e come mezzo per fruire dei servizi della pubblica amministrazione. \
+Integrare sistemi di autenticazione basati su Smart Card nei propri \
+sistemi e applicazioni, credo che possa essere un’attività molto \
+interessante per chi programma e l’aspetto a mio avviso più coinvolgente \
+è la vicinanza con quelli che amo definire bonariaménte “pezzi di ferro”.
+
+:keywords: smartcard, raspberry, mifare, python
+:encoding: utf-8
+:lang: it
+:toc: left
+:hardbreaks-option:
+:sectnums:
+:sectnumlevels: 3
+:!figure-caption:
+:!chapter-signifier:
+:imagesdir: ../images
+:source-highlighter: rouge
+:sectanchors: true

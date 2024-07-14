@@ -1,0 +1,31 @@
+<<<
+== Descrizione dello scenario
+
+Credo d'intuire quale potrebbe essere il vostro pensiero in questo momento. **Che tipo di *Sistema di Accesso* andremo a realizzare?**
+
+Vorrei implementare qualcosa che tutti almeno una volta abbiamo usato. Un comunissimo scenario di *Sistema di Accesso* lo abbiamo vissuto tutti accedendo alla nostra camera di albergo grazie alla Smart Card (o chiave elettronica) consegnata al momento dell'accoglienza.
+
+La figura a seguire mostra lo schema hardware della soluzione che andremo a realizzare.
+
+image::hardware_diagram_smartcard_access_raspberry_pi_1.jpg[title="*Figura 1* - Schema hardware della soluzione di accesso (Smart Card icon da https://www.smartcardfocus.com/)"]
+
+La https://www.nxp.com/products/rfid-nfc/mifare-hf/mifare-classic:MC_41863[MIFARE Classic® 1K contactless] si basa su NXP MF1 IC S50. Questa tipologia di carta è una buona scelta per applicazioni classiche come la biglietteria dei trasporti pubblici, servizi di fidelizzazione e può essere utilizzata anche per molte altre applicazioni come sistemi di apertura porte e simili.
+
+Il lettore di Smart Card deve essere conforme a standard indicati nello schema di figura 1. Nel mio caso ho utilizzato il lettore https://shop.bit4id.com/en/prodotto/minilector-cie/[CIE Bit4id miniLector] collegato al Raspberry Pi tramite la porta USB. Il nome tecnico del lettore che ho utilizzato è: BIT4ID miniLector AIR NFC v3.
+
+Al Raspberry Pi è collegato un modulo di quattro relè gestito tramite le porte https://it.wikipedia.org/wiki/General_Purpose_Input/Output[GPIO]. Nel nostro scenario, i relè rappresentano gli attuatori necessari per aprire le porte dell'hotel dove siamo ospiti.
+
+Appurato che il nostro scenario è quello di un sistema di accesso per consentire agli ospiti di un hotel di accedere alle proprie stanze attraverso una Smart Card, vediamo quali sono i due processi che portano al raggiungimento di questo obiettivo.
+
+La figura 2 illustra il processo semplificato (in notazione https://www.bpmn.org[BPMN]) di ciò che accade quando un ospite viene ricevuto dal personale dell'hotel. Dell'intero processo, solo il *Service Task* (indicato in rosso) sarà l'oggetto dell'implementazione del software.
+
+image::guest_receiving_process.jpg[title="*Figura 2* - Processo semplificato di accoglienza dell'ospite in hotel"]
+
+Il processo di figura 3 mostra invece cosa succede quando l'ospite chiede di entrare nella sua camera tramite l'uso della chiave elettronica appoggiandola sul lettore. Dell'intero processo, solo i Service Task (indicati in rosso) saranno oggetto dell'implementazione del software.
+
+image::room_access_process.jpg[title="Figura 3 - Processo di accesso alla stanza"]
+
+Credo che tutti i processi illustrati (in figura 2 e figura 3) in notazione BPMN siano abbastanza esplicativi da non richiedere ulteriori approfondimenti. I Service Task sono gli elementi che saranno oggetto di nostro interesse per l'implementazione del software che fin da questo momento possiamo dividere in due macro componenti le cui responsabilità devono essere:
+
+1.  il setup della Smart Card (o chiave elettronica) in fase di registrazione dell'ospite presso la struttura alberghiera. All'interno della Smart Card sarà memorizzato l'identificativo di un documento di riconoscimento dell'ospite, sul database del sistema di gestione dell'albergo saranno invece memorizzati i dati anagrafici insieme ad altri dati necessari per associare la chiave elettronica all'ospite e alla stanza a lui assegnata;
+2.  la verifica che la chiave elettronica sia abilitata e associata all'ospite e alla stanza a cui consentire l'accesso.

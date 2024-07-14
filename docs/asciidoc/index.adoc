@@ -1,0 +1,40 @@
+// Inclusione degli attributi specifici per il PDF
+// e comuni a tutti i formati.
+include::attributes/_attributes-pdf.adoc[]
+include::attributes/_attributes-common.adoc[]
+
+= Raspberry Pi e Smart Card Mifare Classic 1K: Realizzare un sistema di accesso
+
+
+// Inclusione capitoli
+include::chapters/00_informazioni_articolo.adoc[]
+
+include::chapters/01_introduzione.adoc[]
+
+include::chapters/02_descrizione_scenario.adoc[]
+
+include::chapters/03_dettaglio_mifare.adoc[]
+
+include::chapters/04_apdu.adoc[]
+
+include::chapters/05_atr.adoc[]
+
+include::chapters/06_requisiti_hardware.adoc[]
+
+include::chapters/07_requisiti_software.adoc[]
+
+include::chapters/08_schema_elettrico.adoc[]
+
+include::chapters/09_progettare_software.adoc[]
+
+include::chapters/10_implementare_software.adoc[]
+
+include::chapters/10_1_pyscard.adoc[]
+
+include::chapters/10_2_struttura_progetto.adoc[]
+
+include::chapters/11_deploy_test_on_rpi.adoc[]
+
+include::chapters/12_conclusioni.adoc[]
+
+include::chapters/13_riferimenti.adoc[]
