@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Security
 
+## [1.0.2.dev0] - 2024-07-04
+
+### Added
+- Added the AsciiDoc for eBook
+
 ## [1.0.1.dev1] - 2024-07-07
 
 ### Added

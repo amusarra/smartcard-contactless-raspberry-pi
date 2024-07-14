@@ -1,0 +1,16 @@
+<<<
+=== Cos’è Pyscard
+**Pyscard**, Python Smart Card library, è un modulo Python che aggiunge il supporto per le Smart Card facilitando la costruzione di applicazioni che hanno la necessità di utilizzare la tecnologia delle Smart Card.
+
+Pyscard supporta la piattaforma Microsoft Windows utilizzando i componenti https://docs.microsoft.com/en-us/previous-versions/windows/desktop/secsmart/microsoft-base-smart-card-cryptographic-service-provider[Microsoft Smart Card Base, Linux e macOS utilizzando PCSC-lite]. Il diagramma di figura 18 mostra l'architettura Pyscard (box in verde). Il modulo https://pyscard.sourceforge.io/epydoc/smartcard.scard.scard-module.html [smartcard.scard] è il wrapper di WinSCard API (*smart card base components*). Il modulo https://pyscard.sourceforge.io/epydoc/index.html[smartcard] è un vero e proprio framework costruito su PC/SC API.
+
+image::architecture_of_the_pyscard_library-scaled.jpg[title="Figura 18 - Architettura di Pyscard"]
+
+<<<
+Pyscard sarà di aiuto per:
+
+1.  Eseguire la connessione al lettore di Smart Card e alla MIFARE Classic 1K
+2.  Filtrare le connessioni alle sole MIFARE Classic 1K tramite l'ATR
+3.  Inviare i comandi APDU
+4.  Ricevere le risposte ai comandi APDU
+5.  Intercettare gli eventi di aggiunta e rimozione Smart Card dal lettore

@@ -1,7 +1,7 @@
     MIT License
 
     Smart Card Contactless Raspberry Pi sample project
-    Copyright (c) 2022 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)
+    Copyright (c) 2024 Antonio Musarra (Antonio Musarra's Blog - https://www.dontesta.it)
 
         Il permesso è così garantito, gratuito, a qualunque persona che ottenga
         una copia di questo software e i file associati di documentazione (il

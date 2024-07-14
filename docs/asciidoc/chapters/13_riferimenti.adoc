@@ -1,0 +1,15 @@
+<<<
+== Riferimenti
+Come di consueto lascio una serie di risorse che ritengo utili ai fini dell’approfondimento degli argomenti trattati nel corso di questo articolo.
+
+- Attuatori per maker – https://amzn.to/3slHmE9
+- Raspberry Pi. La guida completa – https://amzn.to/2RpYZWh
+- Docker: Sviluppare e rilasciare software tramite container – https://amzn.to/3tiyO1W di https://www.linkedin.com/in/serena-sensini[Serena Sensini]
+- Valutiamo se continuare a usare Docker o passare a Podman – https://www.theredcode.it/podman/what-is-podman
+- Pillole di Docker – https://www.youtube.com/watch?v=wAyUdtQF05w di https://www.linkedin.com/in/mauro-cicolella-0b107076/[Mauro Cicolella]
+- Raspberry PI GPIO – Tutti i segreti del pinout – https://www.moreware.org/wp/blog/2021/04/09/raspberry-pi-gpio-tutti-i-segreti-del-pinout/
+- Smart cards – A short illustrated guide ( Feb. 2022) - https://www.thalesgroup.com/en/markets/digital-identity-and-security/technology/smart-cards-basics
+- Hacking Mifare Classic Cards - https://www.blackhat.com/docs/sp-14/materials/arsenal/sp-14-Almeida-Hacking-MIFARE-Classic-Cards-Slides.pdf
+- How to Crack Mifare Classic Cards - https://firefart.at/post/how-to-crack-mifare-classic-cards/
+- A Practical Attack on the MIFARE Classic - https://arxiv.org/pdf/0803.2285.pdf
+- ACR122U Application Programming Interface - https://www.acs.com.hk/download-manual/419/API-ACR122U-2.04.pdf
