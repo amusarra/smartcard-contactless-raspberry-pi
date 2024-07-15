@@ -25,6 +25,7 @@ Il processo di figura 3 mostra invece cosa succede quando l'ospite chiede di ent
 
 image::room_access_process.jpg[title="Figura 3 - Processo di accesso alla stanza"]
 
+<<<
 Credo che tutti i processi illustrati (in figura 2 e figura 3) in notazione BPMN siano abbastanza esplicativi da non richiedere ulteriori approfondimenti. I Service Task sono gli elementi che saranno oggetto di nostro interesse per l'implementazione del software che fin da questo momento possiamo dividere in due macro componenti le cui responsabilità devono essere:
 
 1.  il setup della Smart Card (o chiave elettronica) in fase di registrazione dell'ospite presso la struttura alberghiera. All'interno della Smart Card sarà memorizzato l'identificativo di un documento di riconoscimento dell'ospite, sul database del sistema di gestione dell'albergo saranno invece memorizzati i dati anagrafici insieme ad altri dati necessari per associare la chiave elettronica all'ospite e alla stanza a lui assegnata;

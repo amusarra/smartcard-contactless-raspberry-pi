@@ -13,7 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Security
 
-## [1.0.2.dev0] - 2024-07-04
+## [1.0.2.dev1] - 2024-07-15
+
+### Added
+- Added the GitHub Actions for the AsciiDoc to PDF conversion. The PDF will be available at the directory `docs/asciidoc/`
+
+## Changed
+- Updated the `README.md` with the new section for the AsciiDoc to PDF conversion
+
+## Fixed
+- Fixed the AsciiDoc for the eBook (layout and content)
+
+## [1.0.2.dev0] - 2024-07-14
 
 ### Added
 - Added the AsciiDoc for eBook
