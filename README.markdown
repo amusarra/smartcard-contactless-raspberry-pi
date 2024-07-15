@@ -253,3 +253,31 @@ Animation 1 - Smart Card Init tool in action (on asciinema https://asciinema.org
 ![Run Smart Card Access Tool](docs/images/gif/access_control_mifare_classic_1k_smart_card_speed_x2.gif)
 
 Animation 2 - Smart Card Access tool in action (on asciiname https://asciinema.org/a/475797)
+
+## 5. Documentation
+The documentation of the project is available in the `docs` folder. The documentation is written in Markdown format
+and can be read directly on GitHub pages at the following link: [Smart Card Contactless Raspberry Pi GitHub Pages](https://amusarra.github.io/smartcard-contactless-raspberry-pi/)
+
+Also, the documentation is available in PDF format at the following link: [eBook - Smart Card Contactless Raspberry Pi](https://bit.ly/3LkpkOt).
+The source code of the documentation is available in the `docs/asciidoc` folder of the project.
+
+The GitHub Pages are generated using the [MkDocs](https://www.mkdocs.org/) tool and the 
+[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme using the GitHub Actions workflow
+defined in the `.github/workflows/publish_doc_to_gh_pages.yml` file.
+
+The eBook is generated using the [Asciidoctor](https://asciidoctor.org/) tool and in particular the Asciidoctor PDF.
+The requirement to generate the PDF is to have the Asciidoctor PDF; the instructions for installing this tool are
+available at the following link: [Asciidoctor PDF](https://docs.asciidoctor.org/pdf-converter/latest/install/).
+
+The command to generate the PDF is as follows:
+
+```bash
+# Generate the PDF. The command must be executed from the root of the project.
+# The output file is saved in the docs/asciidoc folder.
+# The <ebook-file-name.pdf> must be replaced with the desired name of the PDF file.
+asciidoctor-pdf -o docs/asciidoc/<ebook-file-name.pdf> docs/asciidoc/index.adoc
+```
+Console 6 - Generate the PDF of the documentation
+
+Also, exist the GitHub Actions workflow defined in the `.github/workflows/generate-pdf.yml` file that generates the PDF
+of the documentation and commits it to the repository in the `docs/asciidoc` folder.
