@@ -1,0 +1,99 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title
+**Sequence diagram of the entry point Setup Smart Card**
+(script setup_smart_card.py)
+end title
+
+autonumber
+actor       "Receptionist (CLI)" as r
+participant "Mifare Classic Interface" as mci
+participant "Smart Card Access Crud (Database)" as crud
+
+
+r -> mci: mifare.MifareClassicInterface(CardObserver)
+activate mci
+
+mci -> mci: __init__(self, authentication_key=None)
+note right
+Initialize and connect to the Smart Card.
+The interface is set up so that it only accepts cards of type
+MIFARE Classic 1K with ATR:
+**3B 8F 80 01 80 4F 0C A0 00 00 03 06 03 00 01 00 00 00 00 6A**
+end note
+mci --> r
+
+r -> mci: mifare_interface.card_request_and_connect()
+alt#Gold #LightGreen Successful case
+    mci -> mci:  CardRequest(timeout=3, cardType=self.__card_type)
+    mci -> mci:  __card_request.waitforcard()
+    ...3 seconds later...
+    mci -> mci:  __card_service.connection.connect()
+    mci --> r: Card Request and Connection Successful
+else #OrangeRed Failure on Card Request and Connect
+    mci --x r: Card Request and Connection Failure
+end
+
+r -> mci: mifare_interface.get_uid()
+mci -> mci: connection.transmit(apdu)
+note right
+APDU: **[0xFF, 0xCA, 0x00, 0x00, 0x04]**
+end note
+mci --> r: Return the UID of the Smart Card
+
+r -> mci: mifare_interface.load_auth_key(authentication_key)
+mci -> mci: connection.transmit(apdu_load_key)
+note right
+APDU: **[0xFF, 0x82, 0x00, 0x00, 0x06] + self.__authentication_key**
+Default key is: **FF FF FF FF FF FFh**
+end note
+mci --> r: Return true if the load authentication keys it's ok false otherwise
+
+r -> mci: mifare_interface.authentication()
+mci -> mci: connection.transmit(apdu_authentication)
+note right
+APDU: **[0xFF, 0x86, 0x00, 0x00, 0x05, 0x01, 0x00, 0x01, 0x60, 0x00]**
+end note
+mci --> r: Return true if the authentication it's ok false otherwise
+
+r -> mci: mifare_interface.get_document_id()
+mci -> mci: connection.transmit(apdu_document_id)
+note right
+APDU: **[0xFF, 0xB0, 0x00, 0x01, 0x10]**
+end note
+mci --> r: Return the identification number of the identification document
+
+r -> mci: mifare_interface.set_document_id(identification_number)
+mci -> mci: connection.transmit(apdu_document_id)
+note right
+APDU: **[0xFF, 0xD6, 0x00, 0x01, 0x10] + document_id**
+Where document_id is a binary data
+end note
+mci --> r: Return true if store it's ok false otherwise
+
+r -> mci: mifare_interface.disconnect()
+mci -> mci: connection.disconnect()
+mci --> r
+deactivate mci
+
+r -> crud: dbstore.SmartCardAccessCrud()
+activate crud
+crud -> crud: __init__()
+note right
+Try connect to the MongoDB NoSQL database
+end note
+crud --> r: Return tha database connection
+
+r -> crud: db.read(search_filter)
+crud --> r
+
+opt#Gold #LightGreen document.size() == 0
+    r -> crud: db.insert_data(new_document)
+    crud --> r: Return the document id (MongoDB Id)
+else #Orange Already exits
+    crud --> r
+    deactivate crud
+end
+
+@enduml

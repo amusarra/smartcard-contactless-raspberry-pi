@@ -1,0 +1,3 @@
+:doctype: book
+:icons: font
+:pdf-theme: docs/asciidoc/resources/themes/basic-theme.yml

@@ -1,0 +1,24 @@
+<<<
+== Dettagli sulle carte MIFARE Classic 1K
+
+MIFARE è un marchio registrato di https://www.nxp.com/[NXP Semiconductors]. I prodotti MIFARE sono circuiti integrati ampiamente utilizzati per l'utilizzo in Smart Card senza contatto e molte altre applicazioni in tutto il mondo. La gamma MIFARE comprende circuiti integrati per la realizzazione di tessere contactless e lettori per la comunicazione con esse.
+
+Il nome MIFARE racchiude diversi tipi di Smart Card senza contatto, quella utilizzata in questo scenario rientra nel tipo *Classic*. Si tratta di schede di memoria a logica cablata che solo parzialmente sono conformi allo standard https://it.wikipedia.org/wiki/ISO/IEC_14443[ISO/IEC 14443A] (caratteristiche fisiche, potenza e interfaccia del segnale radio, inizializzazione e anticollisione), poiché utilizzano un set di comandi proprietari invece del protocollo https://www.iso.org/standard/73599.html[ISO/IEC 14443-4] di alto livello e non sono conformi al formato frame https://www.iso.org/standard/73598.html[ISO/IEC 14443-3] e nelle comunicazioni crittografate usano un protocollo di sicurezza proprietario https://en.wikipedia.org/wiki/Crypto-1[NXP (CRYPTO1)] per l'autenticazione e la crittografia che è stato rotto nel 2008.
+
+Dopo l'ultima frase immagino che vi stiate domandando: **perché scrivere allora un articolo su questa Smart Card?**
+
+La risposta è abbastanza semplice. Questa è una delle https://it.wikipedia.org/wiki/Smart_card#Smart_card_a_sola_memoria[Smart Card a sola memoria] più diffuse e semplici da usare, e per il tipo di scenario qui presentato, la possibilità di scoprire "facilmente" la chiave di autenticazione è secondario, inoltre, questo è articolo prettamente didattico.
+
+La MIFARE Classic 1K dispone di 1024 byte di memoria (https://it.wikipedia.org/wiki/EEPROM[EEPROM]) suddivisa in 16 segmenti; ogni settore è protetto da due chiavi che vengono chiamate A e B. In tutti i tipi di carta, 16 byte a settore sono riservati alle chiavi e alle condizioni d’accesso e non possono essere utilizzati per i dati dell’utente; inoltre, i primi 16 byte contengono il numero di serie univoco e di sola lettura. In questo modo la memoria disponibile si riduce a 752 byte.
+
+Data l'altissima diffusione di questa tipologia di Smart Card e le versioni "cinesi" esistenti, dubito che non ci siano numeri di serie duplicati, visto anche che i byte dedicati alla memorizzazione del numero di serie sono quattro.
+
+image::mifare_classic_1k_memory_organization_MF1S50YYX_V1.png[title="*Figura 4* - Struttura della memoria della Mifare Classic 1K (dal datasheet NXP MIFARE Classic EV1 1K https://www.nxp.com/docs/en/data-sheet/MF1S50YYX_V1.pdf)"]
+
+Prima di poter compiere operazioni di lettura o scrittura sui blocchi di memoria, è necessario eseguire prima un'autenticazione tramite la chiave del settore del blocco. In genere tutte le chiavi (A e B) sono impostate su valore `FFFFFFFFFFFFh` in fase di produzione del chip (e in ogni caso la documentazione fornita al momento dell'acquisto fornisce indicazioni sulle chiavi di accesso e su come eseguire la modifica).
+
+La tabella mostrata in figura 5 rappresenta la mappa della memoria con in evidenza il range degli indirizzi per i *Data Blocks* e i *Trailer Block* per ogni settore. Questa mappa sarà utile nel momento in cui dovremo leggere e scrivere sui data blocks.
+
+image::mifare_1K_memory_map-2.jpg[title="*Figura 5* - Memory Map della MIFARE Classic 1K completa di range d&#39;indirizzi dei blocchi"]
+
+Dopo questa sorvolata sulle caratteristiche principali della MIFARE Classic 1K che sono di nostro interesse per il nostro obiettivo, possiamo andare avanti ed esplorare il modo su come comunicare con la carta per le operazioni di autenticazione, lettura e scrittura.

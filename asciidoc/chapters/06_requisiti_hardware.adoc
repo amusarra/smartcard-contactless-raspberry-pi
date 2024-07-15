@@ -1,0 +1,17 @@
+<<<
+== Requisiti hardware
+Realizzare lo scenario descritto richiede il recupero di una serie di "pezzi di ferro".
+
+1.  https://www.melopero.com/shop/raspberry-pi/boards/raspberry-pi-4-model-b-8gb/?src=raspberrypi[Raspberry Pi 4 Model B 8GByte RAM]
+2.  https://www.raspberrypi.com/documentation/computers/getting-started.html#sd-card-for-raspberry-pi[MicroSD Card (min 8GByte)]
+3.  https://amzn.to/3rkr4uw[Elegoo 4 Channel DC 5V Modulo Relay]
+4.  https://amzn.to/3hKuZ1k[Jumper Wire Cable Cavo F2F female to female]
+5.  https://shop.bit4id.com/prodotto/minilector-cie[Bit4id miniLector CIE]
+6.  https://amzn.to/3vkAifZ[Mifare Classic 1K]
+7.  https://amzn.to/3BReSbF[Mifare Classic 1K RFID Tag] (opzionale)
+
+Per quanto riguarda il Raspberry Pi è possibile optare per la versione con 4GByte di RAM ma è importante installare come sistema operativo l'ultima versione di https://www.raspberrypi.com/documentation/computers/os.html#introduction[Raspberry Pi OS] affinché sia supportato il lettore di Smart Card Bit4id miniLector CIE e questo grazie alla versione 1.4.34-1 della libreria libccid (check via `apt info libccid`).
+
+image::debian_apt_info_libccid.png[title="*Figura 13* - Dettaglio del driver libccid necessario per interoperabilità tra Sistema Operativo e lettore di Smart Card"]
+
+Nel caso in cui abbiate già un lettore di Smart Card o vogliate acquistarne un diverso modello, consiglio di consultare la https://ccid.apdu.fr/ccid/shouldwork.html[lista dei lettori di Smart Card supportati dal driver libccid].

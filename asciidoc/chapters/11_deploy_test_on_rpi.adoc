@@ -1,0 +1,65 @@
+<<<
+== Deploy & Test
+Ci siamo! È arrivato il momento d'installare il progetto software sul Raspberry Pi e verificare che tutto funzioni così per com'è stato ideato. Il deployment diagram della figura a seguire mostra tutti i componenti del nostro sistema di accesso.
+
+image::system_deployment_on_raspberry.png[title="*Figura 22* - Deployment diagram del sistema di accesso via Smart Card Contactless su Raspberry Pi"]
+
+Assumiamo a questo punto che tutti i requisiti software indicati in precedenza siano tutti soddisfatti (fare riferimento a 6. Requisiti Software). Per installare il progetto software sul Raspberry Pi occorre seguire i seguenti passi:
+
+1.  accedere in ssh alla Raspberry Pi;
+2.  decidere una locazione dove installare il progetto software. Non ci sono restrizioni; nel mio caso ho preferito usare la home del mio account;
+3.  eseguire il clone del repository del progetto;
+4.  eseguire l'installazione delle dipendenze Python.
+
+Per ambienti di sviluppo o test è possibile pensare di fare ricorso alla creazione di quella che viene definita nel mondo Python, https://docs.python.org/3/tutorial/venv.html[Virtual Environments].
+
+[source,shell,title="*Console 2* - Installazione del progetto software"]
+....
+# Accesso al Raspberry Pi via SSH
+ssh amusarra@192.168.238.169
+
+# Clone del repository GitHub del progetto
+git clone https://github.com/amusarra/smartcard-contactless-raspberry-pi.git
+
+# Installazione delle dipendenze Python
+cd smartcard-contactless-raspberry-pi
+make
+....
+
+Il comando `make` non fa altro che procedere con l'installazione delle dipendenze Python specificate sul file https://github.com/amusarra/smartcard-contactless-raspberry-pi/blob/master/requirements.txt[requirements.txt] utilizzando https://pypi.org/project/pip/[pip]. La figura 23 mostra il processo d'installazione delle dipendenze Python sul Raspberry Pi. Ultimata l'installazione, è possibile eseguire il test vero e proprio del software. Prima di eseguire il test occorre accertarsi che dal punto di vista hardware sia tutto regolare controllando tutti i collegamenti (vedi schema elettrico), compreso il collegamento del lettore di Smart Card via USB.
+
+image::install_rpi_access_system_via_smart_card_1.png[title="*Figura 23* - Installazione delle dipendenze Python tramite il comando make"]
+
+Ormai dovremmo sapere quali sono gli entry point da utilizzare, sia quello per il setup della Smart Card, sia quello che avvia il controllo degli accessi. Entrambi gli entry point, quindi gli script Python, devono essere avviati specificando una serie di parametri. Le due tabelle a seguire mostrano i parametri d'input dei due script: `setup_smart_card.py` e `access_via_smart_card.py`.
+
+image::mind_map_script_setup_smart_card.png[title="Figura 24 - Tabella dei parametri d&#39;input per lo script Python setup_smart_card.py"]
+
+image::mind_map_script_access_via_smart_card.png[title="*Figura 25* - Tabella dei parametri d&#39;input per lo script Python access_via_smart_card.py"]
+
+La figura 26 mostra un esempio di come si presenta l'help in linea dello script `setup_smart_card.py` attivato utilizzando l'opzione `--help` (o `-h`).
+
+image::setup_smart_card.py_help_option.png[title="Figura 26 - Come si presenta l&#39;help in line dello script setup_smart_card.py"]
+
+A questo punto siamo davvero pronti. Il primo step è la registrazione della Smart Card per il nuovo ospite Mario Rossi il cui documento d'identità ha il numero MU589876XD e al quale assegneremo la stanza numero due.
+
+Prima di avviare la registrazione, prendiamo la Smart Card poggiandola sul lettore. Il comando da avviare per la registrazione è: `./setup_smart_card.py -a FFFFFFFFFFFF -i MU589876XD -s --firstname Mario --lastname Rossi -r 2`
+
+Se tutto va per il verso giusto, l'output ottenuto in console dovrebbe essere quello mostrato dalla figura a seguire.
+
+image::setup_smart_card_run_1.png[title="Figura 27 - Registrazione Smart Card MIFARE Classic 1K con i dati dell&#39;ospite"]
+
+Dopo la registrazione della Smart Card e la consegna all'ospite, quest'ultimo può usare la Smart Card per accedere alla propria stanza assegnata in fase di registrazione, che ricordo essere la numero due.
+
+image::smart_card_registration_data_on_mongodb_1.png[title="Figura 28 - Documento registrato su MongoDB a fronte del processo di registrazione Smart Card"]
+
+Avviamo adesso il programma del controllo degli accessi utilizzando il comando: `./access_via_smart_card.py -a FFFFFFFFFFFF`. Avviato il programma, questo resta in attesa di leggere la Smart Card. Poggiando la Smart Card registrata poc'anzi, l'ospite dovrebbe riuscire ad accedere alla sua stanza, così come mostra la figura a seguire.
+
+image::smart_card_access_control_1.png[title="Figura 29 - Richiesta di accesso via Smart Card MIFARE Classic 1K"]
+
+L'output mostrato dalla figura 29 evidenzia anche un accesso non riuscito perché in questo caso la Smart Card presentata non è registrata sul sistema. Gli screencast a seguire mostrano i due entry point in azione: setup_smart_card.py e access_via_smart_card.py.
+
+image::475795.svg[asciicast,link=https://asciinema.org/a/475795, title="*Screencast 1* - Processo di registrazione Smart Card in azione - https://asciinema.org/a/475795"]
+
+image::475797.svg[asciicast,link=https://asciinema.org/a/475797, title="*Screencast 2* - Processo di accesso alla stanza via Smart Card in azione - https://asciinema.org/a/475797"]
+
+Dopo i due screencast che mostrano il sistema di accesso in azione, possiamo affermare che il nostro lavoro di analisi, progettazione e implementazione sia arrivato al termine, raggiungendo anche l'obiettivo prefissato.

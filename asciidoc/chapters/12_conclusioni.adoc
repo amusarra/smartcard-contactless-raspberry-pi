@@ -1,0 +1,13 @@
+<<<
+== Conclusioni
+Ringrazio tutti voi per essere arrivati “incolumi” alla fine di questo lungo percorso sperando di non essere stato noioso e di essere riuscito nell’intento di rendere interessanti gli argomenti trattati oltre che a spingere la vostra curiosità in avanti.
+
+Potrei lasciarvi un compito per casa: **come aprire la porta di casa utilizzando la propria CIE o TS-CNS**.
+
+Mi sarebbe piaciuto approfondire maggiormente alcuni degli argomenti trattati, come per esempio il framework Pyscard e alcune sezioni del codice Python sviluppato. Nell’attesa di pubblicare altri articoli di approfondimento, vi chiedo di scrivere le vostre impressioni, esperienze o altro di cui vorreste qualche approfondimento utilizzando i commenti all’articolo oppure condividendo attraverso i classici canali social.
+
+Sempre nell'ottica Open Source, il progetto https://github.com/amusarra/smartcard-contactless-raspberry-pi[Smart Card Contactless Raspberry Pi] pubblicato sul mio repository GitHub, contiene all'interno della directory https://github.com/amusarra/smartcard-contactless-raspberry-pi/tree/master/docs[docs] i seguenti elementi:
+
+- il file diagrams.drawio contenente diagrammi e tabelle. File che potete aprire con https://app.diagrams.net/[Draw.io]
+- il file SCH_Smart_Card_Contactless_Raspberry_Pi_2022-03-11.json dello schema elettrico che potete aprire con https://easyeda.com/[EasyEDA]
+- i file UML *.puml di https://plantuml.com/[PlantUML] che contengono i sequence diagram
