@@ -2,7 +2,7 @@ pyscard==2.0.2
 art==5.4
 pidfile==0.1.1
 pid==3.0.4
-pymongo==4.0.1
+pymongo==4.6.3
 colorama==0.4.4
 RPi.GPIO==0.7.1
 fake-rpi==0.7.1
